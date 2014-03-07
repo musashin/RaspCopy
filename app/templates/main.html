@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title> RaspCopy </title>
+  </head>
+  <body>
+      <h1>RaspCopy</h1>
+
+        {% for file in files %}
+        <p><b>{{file.filename}}</b> : {{file.filesize_human}}</p>
+        {% endfor %}
+      </body>
+</html>

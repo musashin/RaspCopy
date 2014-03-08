@@ -1,4 +1,6 @@
-         <table class="table table-bordered">
+
+
+<table class="table table-bordered">
             <thead>
                 <tr>
                     <th>File</th>
@@ -11,7 +13,30 @@
                     <tr>
                         <th>{{file.filename}}</th>
                         <th>{{file.filesize_human}}</th>
+                        <th>
+                            <p class="text-center">
+                                <label class="checkbox">
+                                    <input type="checkbox" name="C" value="{{file.filename}}" class="file_selector">
+                                </label>
+                            </p>
+
+                        </th>
                     </tr>
                 {% endfor %}
             </tbody>
           </table>
+
+
+<script>
+    var selected_files = new Array('start');
+    $(".file_selector").click( function(){
+        if( $(this).is(':checked') ){
+         selected_files[selected_files.length] = $(this).name
+         alert(selected_files.toString());
+        }
+        else {
+         selected_files[selected_files.length] = $(this).name
+         alert('not');
+        }
+    });
+ </script>

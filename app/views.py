@@ -1,10 +1,11 @@
 
 from app import app
 from flask import render_template
-from config import config
+import config
 from os import listdir
-from os.path import isfile, join, getsize, join
+from os.path import isfile, getsize, join
 from utils.hurry import filesize
+
 
 @app.route('/')
 @app.route('/index')

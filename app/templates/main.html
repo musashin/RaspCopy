@@ -13,18 +13,7 @@
      <div class="row-fluid">
        <div class="span6">
           <h1><p class="text-center">Rasp</p></h1>
-          <table class="table table-bordered">
-            <tr>
-                <th>File</th>
-                <th>Size</th>
-            </tr>
-            {% for file in files %}
-              <tr>
-                <th>{{file.filename}}</th>
-                <th>{{file.filesize_human}}</th>
-              </tr>
-            {% endfor %}
-          </table>
+          {% include 'filelist.html' %}
        </div>
        <div class="span6">
         <h1><p class="text-center">Key</p></h1>

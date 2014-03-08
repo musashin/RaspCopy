@@ -1,0 +1,16 @@
+         <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>File</th>
+                    <th>Size</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for file in files %}
+                    <tr>
+                        <th>{{file.filename}}</th>
+                        <th>{{file.filesize_human}}</th>
+                    </tr>
+                {% endfor %}
+            </tbody>
+          </table>

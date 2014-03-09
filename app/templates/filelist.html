@@ -16,7 +16,7 @@
                         <th>
                             <p class="text-center">
                                 <label class="checkbox">
-                                    <input type="checkbox"  value="{{file.filename}}" class="file_selector">
+                                    <input type="checkbox"  size={{file.filesize_bytes}} value="{{file.filename}}" class="file_selector">
                                 </label>
                             </p>
 
@@ -26,17 +26,3 @@
             </tbody>
           </table>
 
-
-<script>
-    var selected_files = new Array();
-    $(".file_selector").click( function(){
-        if( $(this).is(':checked') ){
-         selected_files[selected_files.length] = $(this).attr('value')
-         alert(selected_files.toString());
-        }
-        else {
-         selected_files[selected_files.length] = $(this).attr('value')
-         alert('not');
-        }
-    });
- </script>

@@ -12,4 +12,6 @@ def index():
 
     return render_template("main.html", files=source_file_system.get_file_list())
 
-
+@app.route('/open_folder', methods = ['POST'])
+def open_folder():
+    return 'hello'

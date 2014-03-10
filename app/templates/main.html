@@ -39,4 +39,20 @@
          //  alert(selected_files.toString());
         }
     });
+
+     $(".folder_selector").click( function(){
+        if( $(this).is(':checked') ){
+
+         //total_size += parseInt($(this).attr('size'))
+         change_folder('source',$(this).attr('value'))
+        }
+
+    });
+
+
+    function change_folder(side,folder)
+    {
+        alert(side+folder);
+        $("#test").load('/open_folder',{side: side, folder: folder});
+    }
  </script>

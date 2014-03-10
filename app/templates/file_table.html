@@ -1,0 +1,34 @@
+  <table class="table table-bordered">
+            <div id="test">
+            </div>
+            <thead>
+                <tr>
+                    <th>File</th>
+                    <th>Size</th>
+                    <th>Select</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for file in files %}
+                    <tr>
+                        {% if file.isfile %}
+                            <td><span class="glyphicon glyphicon-file"></span>   {{file.filename}}</td>
+                        {% else %}
+                            <td><span class="glyphicon glyphicon-folder-close"></span>   {{file.filename}}</td>
+                        {% endif %}
+                        <td>{{file.filesize_human}}</td>
+                        <td>
+                            <p class="text-center">
+                                <label class="checkbox">
+                                    {% if file.isfile %}
+                                        <input type="checkbox"  size={{file.filesize_bytes}} value="{{file.filename}}" class="file_selector">
+                                    {% else %}
+                                         <input type="checkbox"  size={{file.filesize_bytes}} value="{{file.filename}}" class="folder_selector">
+                                    {% endif %}
+                                </label>
+                            </p>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+    </table>

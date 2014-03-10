@@ -42,17 +42,19 @@
 
      $(".folder_selector").click( function(){
         if( $(this).is(':checked') ){
-
-         //total_size += parseInt($(this).attr('size'))
-         change_folder('source',$(this).attr('value'))
+         set_folder('source',$(this).attr('value'))
         }
 
     });
 
+    $( document ).ready( function(){
+        set_folder('source','root')
+    });
 
-    function change_folder(side,folder)
+
+    function set_folder(side,folder)
     {
-        alert(side+folder);
-        $("#test").load('/open_folder',{side: side, folder: folder});
+        //alert(side+folder);
+        $("#file_table").load('/open_folder',{side: side, folder: folder});
     }
  </script>

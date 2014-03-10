@@ -21,7 +21,7 @@ class FileSystem:
                  'filesize_bytes': self.safe_file_size(self.current_folder, f),
                  'isfile':  isfile(join(self.current_folder, f))} for f in listdir(self.current_folder)]
 
-    def get_folder_size(start_path = '.'):
+    def get_folder_size(self, start_path='.'):
         total_size = 0
         for dirpath, dirnames, filenames in walk(start_path):
             for f in filenames:

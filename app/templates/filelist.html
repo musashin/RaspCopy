@@ -20,7 +20,11 @@
                         <td>
                             <p class="text-center">
                                 <label class="checkbox">
-                                    <input type="checkbox"  size={{file.filesize_bytes}} value="{{file.filename}}" class="file_selector">
+                                    {% if file.isfile %}
+                                        <input type="checkbox"  size={{file.filesize_bytes}} value="{{file.filename}}" class="file_selector">
+                                    {% else %}
+                                         <input type="checkbox"  size={{file.filesize_bytes}} value="{{file.filename}}" class="folder_selector">
+                                    {% endif %}
                                 </label>
                             </p>
                         </td>

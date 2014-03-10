@@ -14,6 +14,13 @@ class FileSystem:
         self.root = root
         self.current_folder = root
 
+    def set_current_folder(self, folder):
+
+        if folder == "root":
+            self.current_folder = self.root
+        else:
+            self.current_folder = folder
+
     def get_file_list(self):
 
         return [{'filename': f,

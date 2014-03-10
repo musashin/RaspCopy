@@ -42,6 +42,7 @@
 
      $(".folder_selector").click( function(){
         if( $(this).is(':checked') ){
+         alert($(this).attr('value'));
          set_folder('source',$(this).attr('value'))
         }
 

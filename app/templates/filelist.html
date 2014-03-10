@@ -1,6 +1,6 @@
 
-
-<table class="table table-bordered">
+<div class="table-responsive">
+    <table class="table table-bordered">
             <thead>
                 <tr>
                     <th>File</th>
@@ -10,8 +10,12 @@
             </thead>
             <tbody>
                 {% for file in files %}
-                    <tr>
-                        <th>{{file.filename}}</th>
+                    <tr class="info">
+                        {% if file.isfile %}
+                            <th><span class="glyphicon glyphicon-file"></span>   {{file.filename}}</th>
+                        {% else %}
+                            <th><span class="glyphicon glyphicon-folder-close"></span>   {{file.filename}}</th>
+                        {% endif %}
                         <th>{{file.filesize_human}}</th>
                         <th>
                             <p class="text-center">
@@ -24,6 +28,12 @@
                     </tr>
                 {% endfor %}
             </tbody>
-          </table>
+    </table>
+</div>
+<p class="muted" id="filesize">Total Size Selected: </p>
 
-<p class="muted">Fusce dapibus, tellus ac cursus commodo, tortor mauris nibh.</p>
+<script>
+  $("#filesize").ready(function(){
+  $(this).hide();
+});
+</script>

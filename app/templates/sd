@@ -1,0 +1,5 @@
+ {% if file.type equals "file" %}
+                            <th><span class="glyphicon glyphicon-file"></span>   {{file.filename}}</th>
+                        {% else %}
+                            <th><span class="glyphicon glyphicon-folder-close"></span>   {{file.filename}}</th>
+                        {% endif %}

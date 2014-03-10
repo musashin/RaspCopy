@@ -10,30 +10,23 @@
             </thead>
             <tbody>
                 {% for file in files %}
-                    <tr class="info">
+                    <tr>
                         {% if file.isfile %}
-                            <th><span class="glyphicon glyphicon-file"></span>   {{file.filename}}</th>
+                            <td><span class="glyphicon glyphicon-file"></span>   {{file.filename}}</td>
                         {% else %}
-                            <th><span class="glyphicon glyphicon-folder-close"></span>   {{file.filename}}</th>
+                            <td><span class="glyphicon glyphicon-folder-close"></span>   {{file.filename}}</td>
                         {% endif %}
-                        <th>{{file.filesize_human}}</th>
-                        <th>
+                        <td>{{file.filesize_human}}</td>
+                        <td>
                             <p class="text-center">
                                 <label class="checkbox">
                                     <input type="checkbox"  size={{file.filesize_bytes}} value="{{file.filename}}" class="file_selector">
                                 </label>
                             </p>
-
-                        </th>
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>
     </table>
 </div>
 <p class="muted" id="filesize">Total Size Selected: </p>
-
-<script>
-  $("#filesize").ready(function(){
-  $(this).hide();
-});
-</script>

@@ -12,18 +12,18 @@
 
      <div class="row-fluid">
        <div class="span6">
-          <h1><p class="text-center">RaspBerry</p></h1>
-               <div class="table-responsive">
-                    <div id="source_file_table">
-                    {% include 'file_table.html' %}
-                    </div>
-                </div>
+            <h1><p class="text-center">RaspBerry</p></h1>
+            <div class="table-responsive">
+                 <div id="source_file_table">
+
+                 </div>
+            </div>
        </div>
        <div class="span6">
-        <h1><p class="text-center">Key</p></h1>
+            <h1><p class="text-center">Key</p></h1>
             <div class="table-responsive">
                     <div id="destination_file_table">
-                    {% include 'file_table.html' %}
+
                     </div>
             </div>
        </div>
@@ -45,8 +45,7 @@
 
     function set_folder(side,folder)
     {
-        //alert(side+folder);
-        $("#source_file_table").load('/open_folder',{side: side, folder: folder});
-        $("#destination_file_table").load('/open_folder',{side: side, folder: folder});
+        $("#"+side+"_file_table").load('/open_folder',{side: side, folder: folder});
+
     }
  </script>

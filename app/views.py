@@ -17,7 +17,10 @@ def index():
 
 @app.route('/open_folder', methods=['POST'])
 def open_folder():
-    print request.form['side']
 
     file_system[request.form['side']].select_subfolder(request.form['folder'])
-    return render_template("file_table.html", files=file_system[request.form['side']].get_file_list())
+
+    return render_template("file_table.html", files=file_system[request.form['side']].get_file_list(),
+                           side=request.form['side'],
+                           folder_selector_class="folder_selector_"+request.form['side'],
+                           file_selector_class="file_selector_"+request.form['side'])

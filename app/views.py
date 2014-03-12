@@ -17,6 +17,6 @@ def index():
 def open_folder():
     print request.form['side']
     if request.form['side'] == 'source':
-        source_file_system.set_current_folder(request.form['folder'])
+        source_file_system.select_subfolder(request.form['folder'])
         print source_file_system.get_file_list()
         return render_template("file_table.html", files=source_file_system.get_file_list())

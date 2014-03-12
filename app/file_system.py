@@ -14,6 +14,12 @@ class FileSystem:
         self.root = root
         self.current_folder = root
 
+    def select_root(self):
+         self.current_folder = self.root
+
+    def select_up(self):
+         pass
+
     def select_subfolder(self, folder):
 
         if folder == "root":

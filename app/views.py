@@ -4,7 +4,9 @@ from flask import render_template,request
 import config
 from file_system import FileSystem
 
-source_file_system = FileSystem(config.source_directory)
+file_system= {}
+file_system['source'] = FileSystem(config.source_directory)
+file_system['destination'] = FileSystem(config.destination_directory)
 
 @app.route('/')
 @app.route('/index')
@@ -16,7 +18,6 @@ def index():
 @app.route('/open_folder', methods=['POST'])
 def open_folder():
     print request.form['side']
-    if request.form['side'] == 'source':
-        source_file_system.select_subfolder(request.form['folder'])
-        print source_file_system.get_file_list()
-        return render_template("file_table.html", files=source_file_system.get_file_list())
+
+    file_system[request.form['side']].select_subfolder(request.form['folder'])
+    return render_template("file_table.html", files=file_system[request.form['side']].get_file_list())

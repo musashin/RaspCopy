@@ -13,10 +13,19 @@
      <div class="row-fluid">
        <div class="span6">
           <h1><p class="text-center">RaspBerry</p></h1>
-          {% include 'filelist.html' %}
+               <div class="table-responsive">
+                    <div id="source_file_table">
+                    {% include 'file_table.html' %}
+                    </div>
+                </div>
        </div>
        <div class="span6">
         <h1><p class="text-center">Key</p></h1>
+            <div class="table-responsive">
+                    <div id="destination_file_table">
+                    {% include 'file_table.html' %}
+                    </div>
+            </div>
        </div>
 
      </div>
@@ -30,12 +39,14 @@
 
     $( document ).ready( function(){
         set_folder('source','root')
+        set_folder('destination','root')
     });
 
 
     function set_folder(side,folder)
     {
         //alert(side+folder);
-        $("#file_table").load('/open_folder',{side: side, folder: folder});
+        $("#source_file_table").load('/open_folder',{side: side, folder: folder});
+        $("#destination_file_table").load('/open_folder',{side: side, folder: folder});
     }
  </script>

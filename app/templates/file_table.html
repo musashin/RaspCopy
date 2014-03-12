@@ -19,9 +19,9 @@
                             <p class="text-center">
                                 <label class="checkbox">
                                     {% if file.isfile %}
-                                        <input type="checkbox"  size={{file.filesize_bytes}} value="{{file.filename}}" class="{{file_selector_class}}">
+                                        <input type="checkbox"  size={{file.filesize_bytes}} value="{{file.filename}}" class="{{selector_classes.file}}">
                                     {% else %}
-                                         <input type="checkbox"  size={{file.filesize_bytes}} value="{{file.filename}}" class="{{folder_selector_class}}">
+                                         <input type="checkbox"  size={{file.filesize_bytes}} value="{{file.filename}}" class="{{selector_classes.folder}}">
                                     {% endif %}
                                 </label>
                             </p>
@@ -35,7 +35,7 @@
 <script>
 
     //Bindings
-    $(".{{file_selector_class}}").click( function(){
+    $(".{{selector_classes.file}}").click( function(){
         if( $(this).is(':checked') ){
          selected_files[selected_files.length] = $(this).attr('value')
          total_size += parseInt($(this).attr('size'))
@@ -49,7 +49,7 @@
         }
     });
 
-     $(".{{folder_selector_class}}").click( function(){
+     $(".{{selector_classes.folder}}").click( function(){
         if( $(this).is(':checked') ){
          set_folder('{{side}}',$(this).attr('value'))
         }

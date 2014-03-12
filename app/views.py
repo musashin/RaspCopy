@@ -22,5 +22,5 @@ def open_folder():
 
     return render_template("file_table.html", files=file_system[request.form['side']].get_file_list(),
                            side=request.form['side'],
-                           folder_selector_class="folder_selector_"+request.form['side'],
-                           file_selector_class="file_selector_"+request.form['side'])
+                           selector_classes={'folder': "folder_selector_"+request.form['side'],
+                                             'file': "file_selector_"+request.form['side']})

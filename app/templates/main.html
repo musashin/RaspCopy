@@ -43,14 +43,13 @@
     });
 
 
-    function set_folder(side,folder)
-    {
+    function set_folder(side,folder){
+
         $("#"+side+"_file_table").load('/open_folder',{side: side, folder: folder});
     }
 
-    function select_file(side,file_name)
-    {
-        alert(".selected_size_id_"+side);
+    function select_file(side,file_name){
+
         $("#selected_size_id_"+side).load('/select_file',{side: side, file_name: file_name});
     }
  </script>

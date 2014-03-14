@@ -1,6 +1,6 @@
 
 from app import app
-from flask import render_template,request
+from flask import render_template, request
 import config
 from file_system import FileSystem
 
@@ -18,9 +18,7 @@ def index():
 @app.route('/select_file', methods=['POST'])
 def select_file():
 
-    print 'selected' + request.form['file_name'] + ' for ' + request.form['side']
-
-    return 'test'
+    return file_system[request.form['side']].add_selected_file(request.form['file_name'])
 
 @app.route('/open_folder', methods=['POST'])
 def open_folder():

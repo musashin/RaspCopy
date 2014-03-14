@@ -13,6 +13,14 @@ class FileSystem:
 
         self.root = root
         self.current_folder = root
+        self.selected_files = []
+
+    def add_selected_file(self, filename):
+
+        self.selected_files.append({'filename': filename, 'folder': self.current_folder,
+                                    'size':  self.safe_file_size(self.current_folder, filename)})
+
+        return filesize.size(sum([f['size'] for f in self.selected_files]))
 
     def select_root(self):
          self.current_folder = self.root

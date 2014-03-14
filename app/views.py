@@ -15,6 +15,13 @@ def index():
     return render_template("main.html")
 
 
+@app.route('/select_file', methods=['POST'])
+def select_file():
+
+    print 'selected' + request.form['file_name'] + ' for ' + request.form['side']
+
+    return 'test'
+
 @app.route('/open_folder', methods=['POST'])
 def open_folder():
 
@@ -33,7 +40,9 @@ def open_folder():
         return render_template("file_error.html")
 
     else:
+
         return render_template("file_table.html", files=file_list,
                                side=request.form['side'],
                                selector_classes={'folder': "folder_selector_"+request.form['side'],
-                                                 'file': "file_selector_"+request.form['side']})
+                                                 'file': "file_selector_"+request.form['side']},
+                               select_size_id="selected_size_id_"+request.form['side'])

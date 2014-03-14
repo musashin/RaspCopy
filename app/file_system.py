@@ -56,10 +56,10 @@ class FileSystem:
                      for f in listdir(self.current_folder)]
 
         if len(self.current_folder) > len(self.home_folder):
-            file_list.append({'filename': '..',
-                              'filesize_human': '0',
-                              'filesize_bytes': 0,
-                              'isfile':  False})
+            file_list.insert(0, {'filename': '..',
+                                 'filesize_human': '0',
+                                 'filesize_bytes': 0,
+                                 'isfile':  False})
 
         return file_list
 

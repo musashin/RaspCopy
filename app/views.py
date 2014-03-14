@@ -48,4 +48,5 @@ def open_folder():
                                side=request.form['side'],
                                selector_classes={'folder': "folder_selector_"+request.form['side'],
                                                  'file': "file_selector_"+request.form['side']},
-                               select_size_id="selected_size_id_"+request.form['side'])
+                               select_size_id="selected_size_id_"+request.form['side'],
+                               current_folder= file_system[request.form['side']].current_folder)

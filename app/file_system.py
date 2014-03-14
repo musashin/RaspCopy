@@ -1,8 +1,8 @@
 __author__ = 'Nicolas'
 
 
-from os import listdir,walk,sep
-from os.path import isfile, getsize, join
+from os import listdir, walk, sep
+from os.path import isfile, getsize, join, normpath
 from utils.hurry import filesize
 
 
@@ -11,8 +11,8 @@ class FileSystem:
 
     def __init__(self, home_folder):
 
-        self.home_folder = home_folder
-        self.current_folder = home_folder
+        self.home_folder = normpath(home_folder)
+        self.current_folder = self.home_folder
         self.selected_files = []
 
     def get_selected_size(self):
@@ -57,7 +57,7 @@ class FileSystem:
 
         if len(self.current_folder) > len(self.home_folder):
             file_list.insert(0, {'filename': '..',
-                                 'filesize_human': '0',
+                                 'filesize_human': '-',
                                  'filesize_bytes': 0,
                                  'isfile':  False})
 
@@ -70,6 +70,11 @@ class FileSystem:
                 fp = join(dirpath, f)
                 total_size += getsize(fp)
         return total_size
+
+    def get_current_folder_relative(self):
+
+
+        return sep.join(self.current_folder.split(sep)[len(self.home_folder.split(sep))-1:])
 
     def safe_file_size(self, path, current_file):
         try:

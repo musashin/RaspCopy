@@ -38,18 +38,16 @@
     $(".{{selector_classes.file}}").click( function(){
         if( $(this).is(':checked') ){
 
-         select_file('{{side}}',$(this).attr('value'))
+          select_file('{{side}}',$(this).attr('value'))
 
-        }
-        else {
-         var index_to_remove = selected_files.indexOf($(this).attr('value'))
-         selected_files.splice(index_to_remove,1);
-         total_size -= parseInt($(this).attr('size'))
-         //  alert(selected_files.toString());
+        } else {
+
+          deselect_file('{{side}}',$(this).attr('value'))
         }
     });
 
      $(".{{selector_classes.folder}}").click( function(){
+
         if( $(this).is(':checked') ){
          set_folder('{{side}}',$(this).attr('value'))
         }

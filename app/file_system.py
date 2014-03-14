@@ -15,12 +15,22 @@ class FileSystem:
         self.current_folder = root
         self.selected_files = []
 
+    def get_selected_size(self):
+        return filesize.size(sum([f['size'] for f in self.selected_files]))
+
     def add_selected_file(self, filename):
 
         self.selected_files.append({'filename': filename, 'folder': self.current_folder,
                                     'size':  self.safe_file_size(self.current_folder, filename)})
 
-        return filesize.size(sum([f['size'] for f in self.selected_files]))
+        return self.get_selected_size()
+
+    def remove_selected_file(self, filename):
+
+        self.selected_files = [f for f in self.selected_files
+                               if not(f['filename'] == filename and f['folder'] == self.current_folder)]
+
+        return self.get_selected_size()
 
     def select_root(self):
          self.current_folder = self.root

@@ -20,6 +20,11 @@ def select_file():
 
     return file_system[request.form['side']].add_selected_file(request.form['file_name'])
 
+@app.route('/deselect_file', methods=['POST'])
+def deselect_file():
+
+    return file_system[request.form['side']].remove_selected_file(request.form['file_name'])
+
 @app.route('/open_folder', methods=['POST'])
 def open_folder():
 

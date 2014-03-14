@@ -52,4 +52,9 @@
 
         $("#selected_size_id_"+side).load('/select_file',{side: side, file_name: file_name});
     }
+
+    function deselect_file(side,file_name){
+
+        $("#selected_size_id_"+side).load('/deselect_file',{side: side, file_name: file_name});
+    }
  </script>

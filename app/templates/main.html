@@ -9,7 +9,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
   <body>
-    <div id="test">0</div>
      <div class="row-fluid">
        <div class="span6">
             <h1><p class="text-center">RaspBerry</p></h1>
@@ -51,10 +50,14 @@
     function select_file(side,file_name){
 
         $("#selected_size_id_"+side).load('/select_file',{side: side, file_name: file_name});
+
+        //alert($("#selected_size_id_"+side).text())
     }
 
     function deselect_file(side,file_name){
 
         $("#selected_size_id_"+side).load('/deselect_file',{side: side, file_name: file_name});
+
+
     }
  </script>

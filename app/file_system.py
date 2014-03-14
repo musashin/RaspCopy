@@ -1,7 +1,7 @@
 __author__ = 'Nicolas'
 
 
-from os import listdir,walk
+from os import listdir,walk,sep
 from os.path import isfile, getsize, join
 from utils.hurry import filesize
 
@@ -9,10 +9,10 @@ from utils.hurry import filesize
 class FileSystem:
 
 
-    def __init__(self, root):
+    def __init__(self, home_folder):
 
-        self.root = root
-        self.current_folder = root
+        self.home_folder = home_folder
+        self.current_folder = home_folder
         self.selected_files = []
 
     def get_selected_size(self):
@@ -33,24 +33,35 @@ class FileSystem:
         return self.get_selected_size()
 
     def select_root(self):
-         self.current_folder = self.root
+         self.current_folder = self.home_folder
 
     def select_up(self):
-         pass
+
+        if len(self.current_folder) > len(self.home_folder):
+            self.current_folder = sep.join(self.current_folder.split(sep)[0:-1])
 
     def select_subfolder(self, folder):
 
         if folder == "root":
-            self.current_folder = self.root
+            self.current_folder = self.home_folder
         else:
             self.current_folder = join(self.current_folder, folder)
 
     def get_file_list(self):
 
-        return [{'filename': f,
-                 'filesize_human': filesize.size(self.safe_file_size(self.current_folder, f)),
-                 'filesize_bytes': self.safe_file_size(self.current_folder, f),
-                 'isfile':  isfile(join(self.current_folder, f))} for f in listdir(self.current_folder)]
+        file_list = [{'filename': f,
+                      'filesize_human': filesize.size(self.safe_file_size(self.current_folder, f)),
+                      'filesize_bytes': self.safe_file_size(self.current_folder, f),
+                      'isfile':  isfile(join(self.current_folder, f))}
+                     for f in listdir(self.current_folder)]
+
+        if len(self.current_folder) > len(self.home_folder):
+            file_list.append({'filename': '..',
+                              'filesize_human': '0',
+                              'filesize_bytes': 0,
+                              'isfile':  False})
+
+        return file_list
 
     def get_folder_size(self, start_path='.'):
         total_size = 0

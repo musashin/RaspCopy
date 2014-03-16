@@ -32,7 +32,7 @@ class FileSystem:
 
         return self.get_selected_size()
 
-    def select_root(self):
+    def select_home(self):
          self.current_folder = self.home_folder
 
     def select_up(self):

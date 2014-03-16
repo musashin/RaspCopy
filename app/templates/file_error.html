@@ -18,10 +18,19 @@
         <br><br><br><br>
 
         <div class="btn-group">
-            <button class="btn btn-info btn-large"><i class="glyphicon glyphicon-hdd"></i> Mount</button>
-            <button class="btn btn-info btn-large"><i class="glyphicon glyphicon-refresh"></i> Refresh</button>
+            <button id="mount_action" class="btn btn-info btn-large"><i class="glyphicon glyphicon-hdd"></i> Mount</button>
+            <button id="refresh_action" class="btn btn-info btn-large"><i class="glyphicon glyphicon-refresh"></i> Refresh</button>
         </div>
     </div>
 </div>
 
 
+<script>
+  $('#loading-example-btn').click(function () {
+    var btn = $(this)
+    btn.button('loading')
+    $.ajax(...).always(function () {
+      btn.button('reset')
+    });
+  });
+</script>

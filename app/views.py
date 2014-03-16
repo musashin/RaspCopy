@@ -29,8 +29,8 @@ def deselect_file():
 def open_folder():
 
     try:
-        if request.form['folder'] == 'root':
-            file_system[request.form['side']].select_root()
+        if request.form['folder'] == 'home':
+            file_system[request.form['side']].select_home()
         elif request.form['folder'] == '..':
             file_system[request.form['side']].select_up()
         else:

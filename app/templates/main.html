@@ -58,6 +58,17 @@
 
         $("#selected_size_id_"+side).load('/deselect_file',{side: side, file_name: file_name});
 
+    }
+
+    function mount_file_system(side){
+
+      $.post("/mount",
+      {
+        side: side
+      },function(data,status){
+        alert("mounting");
+      });
 
     }
+
  </script>

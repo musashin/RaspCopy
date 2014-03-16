@@ -25,6 +25,14 @@ def deselect_file():
 
     return file_system[request.form['side']].remove_selected_file(request.form['file_name'])
 
+
+@app.route('/mount', methods=['POST'])
+def mount():
+
+    print "mounting "+ request.form['side']
+
+
+
 @app.route('/open_folder', methods=['POST'])
 def open_folder():
 
@@ -40,7 +48,11 @@ def open_folder():
 
     except Exception as e:
 
-        return render_template("file_error.html", error_message=str(e))
+        return render_template("file_error.html",
+                               error_message=str(e),
+                               side=request.form['side'],
+                               action={'mount': "mount_"+request.form['side'],
+                                       'refresh': "refresh_"+request.form['side']})
 
     else:
 
@@ -49,4 +61,4 @@ def open_folder():
                                selector_classes={'folder': "folder_selector_"+request.form['side'],
                                                  'file': "file_selector_"+request.form['side']},
                                select_size_id="selected_size_id_"+request.form['side'],
-                               current_folder= file_system[request.form['side']].get_current_folder_relative())
+                               current_folder=file_system[request.form['side']].get_current_folder_relative())

@@ -40,7 +40,7 @@ def open_folder():
 
     except Exception as e:
 
-        return render_template("file_error.html")
+        return render_template("file_error.html", error_message=str(e))
 
     else:
 

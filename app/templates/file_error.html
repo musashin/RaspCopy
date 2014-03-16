@@ -5,8 +5,17 @@
 
         <br><br>
 
-        <h1><i class="glyphicon glyphicon-thumbs-down"> Access Error</i></h1>
-        <br><br>
+        <h2><i class="glyphicon glyphicon-thumbs-down"> Cannot display</i></h2>
+        <br>
+
+        <a data-toggle="collapse"  href="#details">
+          Details
+        </a>
+
+        <div id="details" class="panel-collapse collapse">
+            {{error_message}}
+        </div>
+        <br><br><br><br>
 
         <div class="btn-group">
             <button class="btn btn-info btn-large"><i class="glyphicon glyphicon-hdd"></i> Mount</button>

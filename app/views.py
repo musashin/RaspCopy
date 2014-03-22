@@ -50,7 +50,6 @@ def open_folder():
 
     except Exception as e:
 
-        print conf[request.form['side']]['mount_command']
         return render_template("file_error.html",
                                error_message=str(e),
                                side=request.form['side'],

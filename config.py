@@ -10,5 +10,5 @@ source['unmount_command'] = 'calc'
 
 destination = dict()
 destination['directory'] = 'csxcsd'# r'C:\Intel'
-destination['mount_command'] = None #'calc'
+destination['mount_command'] = 'calc'
 destination['unmount_command'] = 'notepad'

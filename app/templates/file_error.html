@@ -32,4 +32,8 @@
     alert("mounting");
     mount_file_system('{{side}}')
   });
+
+   $("#{{action.refresh}}").click(function () {
+    set_folder('{{side}}','home')
+  });
 </script>

@@ -4,9 +4,11 @@ from flask import render_template, request
 import config
 from file_system import FileSystem
 
-file_system= {}
-file_system['source'] = FileSystem(config.source_directory)
-file_system['destination'] = FileSystem(config.destination_directory)
+file_system = dict()
+file_system['source'] = FileSystem(config.source['directory'])
+file_system['destination'] = FileSystem(config.destination['directory'])
+conf = {'source': config.source, 'destination': config.destination }
+
 
 @app.route('/')
 @app.route('/index')
@@ -48,11 +50,13 @@ def open_folder():
 
     except Exception as e:
 
+        print conf[request.form['side']]['mount_command']
         return render_template("file_error.html",
                                error_message=str(e),
                                side=request.form['side'],
                                action={'mount': "mount_"+request.form['side'],
-                                       'refresh': "refresh_"+request.form['side']})
+                                       'refresh': "refresh_"+request.form['side']},
+                               config=conf[request.form['side']])
 
     else:
 

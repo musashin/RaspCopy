@@ -32,6 +32,12 @@ class FileSystem:
 
         return self.get_selected_size()
 
+    def is_selected(self, filename, folder):
+
+        return any(f['filename'] == filename and f['folder'] == folder for f in self.selected_files)
+
+
+
     def select_home(self):
          self.current_folder = self.home_folder
 
@@ -52,14 +58,16 @@ class FileSystem:
         file_list = [{'filename': f,
                       'filesize_human': filesize.size(self.safe_file_size(self.current_folder, f)),
                       'filesize_bytes': self.safe_file_size(self.current_folder, f),
-                      'isfile':  isfile(join(self.current_folder, f))}
+                      'isfile':  isfile(join(self.current_folder, f)),
+                      'isselected':  self.is_selected(f,self.current_folder)}
                      for f in listdir(self.current_folder)]
 
         if len(self.current_folder) > len(self.home_folder):
             file_list.insert(0, {'filename': '..',
                                  'filesize_human': '-',
                                  'filesize_bytes': 0,
-                                 'isfile':  False})
+                                 'isfile':  False,
+                                 'isselected':  False})
 
         return file_list
 

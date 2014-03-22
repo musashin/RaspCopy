@@ -21,7 +21,7 @@
                             <p class="text-center">
                                 <label class="checkbox">
                                     {% if file.isfile %}
-                                        <input type="checkbox"  size={{file.filesize_bytes}} value="{{file.filename}}" class="{{selector_classes.file}}">
+                                        <input type="checkbox"  size={{file.filesize_bytes}} value="{{file.filename}}" class="{{selector_classes.file}}" {{'checked' if file.isselected }}>
                                     {% else %}
                                          <input type="checkbox"  size={{file.filesize_bytes}} value="{{file.filename}}" class="{{selector_classes.folder}}">
                                     {% endif %}

@@ -5,6 +5,8 @@ __author__ = 'Nicolas'
 from threading import Thread
 
 
+my_background_jobs = []
+
 class BackgroundJob(Thread):
 
     def __init__(self, name, job, *args, **kwargs):
@@ -14,6 +16,7 @@ class BackgroundJob(Thread):
         self.job = job
         self.args = args
         self.kwargs = kwargs
+        my_background_jobs.append(self.name)
 
     def run(self):
         self.job(*self.args , **self.kwargs)
@@ -21,7 +24,8 @@ class BackgroundJob(Thread):
 
 def async(f):
     def wrapper(*args, **kwargs):
-        thr = BackgroundJob(name='tt', job=f, *args, **kwargs)
+        thr = BackgroundJob(name=f.__name__, job=f, *args, **kwargs)
+
         thr.start()
     return wrapper
 

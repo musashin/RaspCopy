@@ -59,7 +59,7 @@ class FileSystem:
                       'filesize_human': filesize.size(self.safe_file_size(self.current_folder, f)),
                       'filesize_bytes': self.safe_file_size(self.current_folder, f),
                       'isfile':  isfile(join(self.current_folder, f)),
-                      'isselected':  self.is_selected(f,self.current_folder)}
+                      'isselected':  self.is_selected(f, self.current_folder)}
                      for f in listdir(self.current_folder)]
 
         if len(self.current_folder) > len(self.home_folder):
@@ -80,7 +80,6 @@ class FileSystem:
         return total_size
 
     def get_current_folder_relative(self):
-
 
         return sep.join(self.current_folder.split(sep)[len(self.home_folder.split(sep))-1:])
 

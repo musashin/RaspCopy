@@ -42,7 +42,10 @@ class BackgroundJob(Thread):
         my_background_jobs[self.name] = self.status
 
     def run(self):
-        self.job(self, *self.args, **self.kwargs)
+
+        named_args = self.kwargs
+        named_args['execution_thread']= self
+        self.job(*self.args, **self.kwargs)
 
     def  report_status(self, status, percent):
 
@@ -68,7 +71,7 @@ if __name__ == "__main__":
     import time
 
     @async
-    def print_time(execution_thread, init_count, delay):
+    def print_time(init_count, delay, execution_thread=None):
         counter = init_count
         while counter:
 

@@ -1,13 +1,9 @@
-__author__ = 'Nicolas'
-
-
 
 from threading import *
 
-
-my_background_jobs = dict()
-
+_background_jobs_status = dict()
 _status_lock = Lock()
+_max_background_job_count = 1
 
 def is_job_running(job_name):
     return any(t for t in enumerate() if t.name == job_name)
@@ -18,7 +14,7 @@ def get_status(job_name):
 
     try:
         _status_lock.acquire()
-        job_status =  my_background_jobs[job_name]
+        job_status = _background_jobs_status[job_name]
         _status_lock.release()
     except:
         try:
@@ -28,18 +24,24 @@ def get_status(job_name):
 
     return job_status
 
+
 class BackgroundJob(Thread):
+
+    job_count = 0
 
     def __init__(self, name, job, *args, **kwargs):
 
-        Thread.__init__(self,name=name)
+        Thread.__init__(self, name=name)
         self.name = name
         self.job = job
         self.args = args
         self.kwargs = kwargs
         self.status = dict()
-        #TODO do not authorise duplicates!!
-        my_background_jobs[self.name] = self.status
+        if self.job_count < _max_background_job_count:
+            _background_jobs_status[self.name] = self.status
+            self.job_count += 1
+        else:
+            raise Exception('Only {0!s} job supported'.format(_max_background_job_count))
 
     def run(self):
 
@@ -47,7 +49,7 @@ class BackgroundJob(Thread):
         named_args['execution_thread']= self
         self.job(*self.args, **self.kwargs)
 
-    def  report_status(self, status, percent):
+    def report_status(self, status, percent):
 
         _status_lock.acquire()
         self.status['status'] = str(status)
@@ -55,7 +57,8 @@ class BackgroundJob(Thread):
         _status_lock.release()
 
     def remove_from_jobs(self):
-        del my_background_jobs[self.name]
+        del _background_jobs_status[self.name]
+        self.job_count -= 1
 
 def async(f):
     def wrapper(*args, **kwargs):
@@ -78,8 +81,6 @@ if __name__ == "__main__":
             try:
                 execution_thread.report_status(status='count is {}'.format(str(counter)),
                                                percent=str((init_count-counter/init_count * 100.0)))
-                #status['status'] = 'count is {}'.format(str(counter))
-                #status['percent'] = str((init_count-counter/init_count * 100.0))
             except:
                 pass
 
@@ -93,9 +94,6 @@ if __name__ == "__main__":
             pass
 
     print_time(init_count=10, delay=1)
-    #job = BackgroundJob('test', print_time, init_count=10, delay=1)
-
-    #job.start()
 
     while True:
         time.sleep(0.5)

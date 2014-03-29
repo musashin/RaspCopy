@@ -5,8 +5,8 @@ import config
 from file_system import FileSystem
 
 file_system = dict()
-file_system['source'] = FileSystem(config.source['directory'])
-file_system['destination'] = FileSystem(config.destination['directory'])
+file_system['source'] = FileSystem(config.source)
+file_system['destination'] = FileSystem(config.destination)
 conf = {'source': config.source, 'destination': config.destination }
 
 

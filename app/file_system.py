@@ -8,10 +8,9 @@ from utils.hurry import filesize
 
 class FileSystem:
 
+    def __init__(self, config):
 
-    def __init__(self, home_folder):
-
-        self.home_folder = normpath(home_folder)
+        self.home_folder = normpath(config['directory'])
         self.current_folder = self.home_folder
         self.selected_files = []
 
@@ -35,8 +34,6 @@ class FileSystem:
     def is_selected(self, filename, folder):
 
         return any(f['filename'] == filename and f['folder'] == folder for f in self.selected_files)
-
-
 
     def select_home(self):
          self.current_folder = self.home_folder
@@ -95,4 +92,8 @@ class FileSystem:
             size = 0
 
         return size
+
+
+if __name__ == '__main__':
+    pass
 

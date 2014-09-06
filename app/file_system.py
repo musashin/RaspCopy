@@ -4,7 +4,8 @@ __author__ = 'Nicolas'
 from os import listdir, walk, sep
 from os.path import isfile, getsize, join, normpath
 from utils.hurry import filesize
-
+from async_task import async, get_status
+import subprocess
 
 class FileSystem:
 
@@ -13,6 +14,7 @@ class FileSystem:
         self.home_folder = normpath(config['directory'])
         self.current_folder = self.home_folder
         self.selected_files = []
+        self.config = config
 
     def get_selected_size(self):
         return filesize.size(sum([f['size'] for f in self.selected_files]))
@@ -94,6 +96,29 @@ class FileSystem:
         return size
 
 
+@async
+def mount_device(command, execution_thread=None):
+
+    if execution_thread:
+        execution_thread.report_status(status='mounting',
+                                       percent=None)
+
+    subprocess.call(command)
+    time.sleep(10)
+    execution_thread.report_status(status='mounted',
+                                   percent='100')
+    time.sleep(10)
+    if execution_thread:
+        execution_thread.remove_from_jobs()
+
 if __name__ == '__main__':
-    pass
+
+    import config
+    import time
+
+    mount_device(command=config.source['mount_command'])
+
+    while True:
+        time.sleep(0.5)
+        print get_status('mount_device')
 

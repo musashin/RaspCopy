@@ -2,7 +2,7 @@ __author__ = 'Nicolas'
 
 
 from os import listdir, walk, sep, stat
-from os.path import isfile, getsize, join, normpath
+from os.path import isfile, getsize, join, normpath, basename
 from utils.hurry import filesize
 from async_task import async, get_status
 import subprocess
@@ -126,12 +126,11 @@ def umount_device(command, post_delay=0, execution_thread=None):
 
 block_size = 128 #16384
 
-@async
-def copy_file(source_file, destination_file, overwrite, execution_thread=None):
+def copy_file(source_file, destination_file, overwrite, report_delegate=None):
 
-    if execution_thread:
-        execution_thread.report_status(status='starting file copy',
-                                       percent='0')
+    if report_delegate:
+        report_delegate(status='starting file copy',
+                        percent='0')
 
     if not overwrite:
         if isfile(destination_file):
@@ -148,19 +147,27 @@ def copy_file(source_file, destination_file, overwrite, execution_thread=None):
 
             cur_block_pos += block_size
 
-            if execution_thread:
-                execution_thread.report_status(status='copy in progress',
-                                               percent=str(float(cur_block_pos)/float(src_size)*100.0))
+            if report_delegate:
+                report_delegate(status='copying' + basename(source_file),
+                                percent=str(float(cur_block_pos)/float(src_size)*100.0))
 
             if not cur_block:
                 break
             else:
                 dest.write(cur_block)
 
-    if execution_thread:
-        execution_thread.report_status(status='file copy complete',
-                                       percent='100')
-        execution_thread.remove_from_jobs()
+
+@async
+def copy_folder(source_folder, destination_folder, overwrite, execution_thread=None):
+
+    all_files_in_source = [f for f in listdir(source_folder) if isfile(join(source_folder, f))]
+
+    for file_to_copy in all_files_in_source:
+        copy_file(source_file= join(source_folder, file_to_copy),
+                  destination_file= join(destination_folder, file_to_copy),
+                  overwrite= overwrite,
+                  report_delegate= lambda status, percent: execution_thread.report_status(status, percent))
+
 
 if __name__ == '__main__':
 
@@ -169,7 +176,12 @@ if __name__ == '__main__':
 
     #copy_file(source_file='C:\\temp\\source\\output.txt', destination_file='C:\\temp\\dest\\output.txt', overwrite=True)
 
-    copy_file(source_file='C:\\temp\\source\\wildlife.wmv', destination_file='C:\\temp\\dest\\output.txt', overwrite=True)
+    #copy_file(source_file='C:\\temp\\source\\wildlife.wmv', destination_file='C:\\temp\\dest\\output.txt', overwrite=True)
+
+
+    copy_folder(source_folder='C:\\temp\\source\\',
+                destination_folder='C:\\temp\\dest\\',
+                overwrite=True)
 
     #mount_device(command=config.source['mount_command'], post_delay=10)
 
@@ -177,5 +189,5 @@ if __name__ == '__main__':
 
     while True:
         time.sleep(0.5)
-        print get_status('copy_file')
+        print get_status('copy_folder')
 

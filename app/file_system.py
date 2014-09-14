@@ -1,7 +1,7 @@
 __author__ = 'Nicolas'
 
 
-from os import listdir, walk, sep
+from os import listdir, walk, sep, stat
 from os.path import isfile, getsize, join, normpath
 from utils.hurry import filesize
 from async_task import async, get_status
@@ -97,18 +97,69 @@ class FileSystem:
 
 
 @async
-def mount_device(command, execution_thread=None):
+def mount_device(command, post_delay=0, execution_thread=None):
 
     if execution_thread:
         execution_thread.report_status(status='mounting',
-                                       percent=None)
+                                       percent='0')
 
     subprocess.call(command)
-    time.sleep(10)
+    time.sleep(post_delay)
     execution_thread.report_status(status='mounted',
                                    percent='100')
-    time.sleep(10)
     if execution_thread:
+        execution_thread.remove_from_jobs()
+
+@async
+def umount_device(command, post_delay=0, execution_thread=None):
+
+    if execution_thread:
+        execution_thread.report_status(status='mounting',
+                                       percent='0')
+
+    subprocess.call(command)
+    time.sleep(post_delay)
+    execution_thread.report_status(status='mounted',
+                                   percent='100')
+    if execution_thread:
+        execution_thread.remove_from_jobs()
+
+block_size = 128 #16384
+
+@async
+def copy_file(source_file, destination_file, overwrite, execution_thread=None):
+
+    if execution_thread:
+        execution_thread.report_status(status='starting file copy',
+                                       percent='0')
+
+    if not overwrite:
+        if isfile(destination_file):
+            raise IOError("File exists, not overwriting")
+
+    with open(source_file, "rb") as src, open(destination_file, "wb") as dest:
+
+        src_size = stat(source_file).st_size
+
+        cur_block_pos = 0  # a running total of current position
+
+        while True:
+            cur_block = src.read(block_size)
+
+            cur_block_pos += block_size
+
+            if execution_thread:
+                execution_thread.report_status(status='copy in progress',
+                                               percent=str(float(cur_block_pos)/float(src_size)*100.0))
+
+            if not cur_block:
+                break
+            else:
+                dest.write(cur_block)
+
+    if execution_thread:
+        execution_thread.report_status(status='file copy complete',
+                                       percent='100')
         execution_thread.remove_from_jobs()
 
 if __name__ == '__main__':
@@ -116,9 +167,15 @@ if __name__ == '__main__':
     import config
     import time
 
-    mount_device(command=config.source['mount_command'])
+    #copy_file(source_file='C:\\temp\\source\\output.txt', destination_file='C:\\temp\\dest\\output.txt', overwrite=True)
+
+    copy_file(source_file='C:\\temp\\source\\wildlife.wmv', destination_file='C:\\temp\\dest\\output.txt', overwrite=True)
+
+    #mount_device(command=config.source['mount_command'], post_delay=10)
+
+    #umount_device(command=config.source['unmount_command'], post_delay=10)
 
     while True:
         time.sleep(0.5)
-        print get_status('mount_device')
+        print get_status('copy_file')
 

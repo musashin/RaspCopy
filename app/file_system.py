@@ -172,6 +172,21 @@ def copy_folder(source_folder, destination_folder, overwrite, execution_thread=N
     if execution_thread:
         execution_thread.remove_from_jobs()
 
+@async
+def copy_files(files_to_copy, destination_folder, overwrite, execution_thread=None):
+
+    print files_to_copy
+    for file_to_copy in files_to_copy:
+
+
+        copy_file(source_file= join(file_to_copy['folder'], file_to_copy['filename']),
+                  destination_file= join(destination_folder, file_to_copy['filename']),
+                  overwrite= overwrite,
+                  report_delegate= lambda status, percent: execution_thread.report_status(status, percent))
+
+    if execution_thread:
+        execution_thread.remove_from_jobs()
+
 
 if __name__ == '__main__':
 

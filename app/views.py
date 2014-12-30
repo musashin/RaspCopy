@@ -2,7 +2,7 @@
 from app import app
 from flask import render_template, request
 import config
-from file_system import FileSystem, mount_device
+from file_system import FileSystem, mount_device, copy_files
 
 file_system = dict()
 file_system['source'] = FileSystem(config.source)
@@ -27,6 +27,12 @@ def deselect_file():
 
     return file_system[request.form['side']].remove_selected_file(request.form['file_name'])
 
+
+@app.route('/copy', methods=['POST'])
+def copy():
+    copy_files(files_to_copy = file_system['source'].selected_files, destination_folder = file_system['destination'].current_folder , overwrite = True)
+
+    return ""
 
 @app.route('/mount', methods=['POST'])
 def mount():

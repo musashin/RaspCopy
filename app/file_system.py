@@ -99,6 +99,7 @@ class FileSystem:
 @async
 def mount_device(command, post_delay=0, execution_thread=None):
 
+    print command
     if execution_thread:
         execution_thread.report_status(status='mounting',
                                        percent='0')
@@ -149,7 +150,7 @@ def copy_file(source_file, destination_file, overwrite, report_delegate=None):
 
             if report_delegate:
                 report_delegate(status='copying' + basename(source_file),
-                                percent=str(float(cur_block_pos)/float(src_size)*100.0))
+                                percent=str(round(float(cur_block_pos)/float(src_size)*100.0)))
 
             if not cur_block:
                 break
@@ -168,6 +169,9 @@ def copy_folder(source_folder, destination_folder, overwrite, execution_thread=N
                   overwrite= overwrite,
                   report_delegate= lambda status, percent: execution_thread.report_status(status, percent))
 
+    if execution_thread:
+        execution_thread.remove_from_jobs()
+
 
 if __name__ == '__main__':
 
@@ -179,11 +183,11 @@ if __name__ == '__main__':
     #copy_file(source_file='C:\\temp\\source\\wildlife.wmv', destination_file='C:\\temp\\dest\\output.txt', overwrite=True)
 
 
-    copy_folder(source_folder='C:\\temp\\source\\',
-                destination_folder='C:\\temp\\dest\\',
-                overwrite=True)
+    #copy_folder(source_folder='C:\\temp\\source\\',
+    #            destination_folder='C:\\temp\\dest\\',
+    #            overwrite=True)
 
-    #mount_device(command=config.source['mount_command'], post_delay=10)
+    mount_device(command=config.destination['mount_command'], post_delay=10)
 
     #umount_device(command=config.source['unmount_command'], post_delay=10)
 

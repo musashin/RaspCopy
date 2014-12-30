@@ -2,7 +2,7 @@
 from app import app
 from flask import render_template, request
 import config
-from file_system import FileSystem
+from file_system import FileSystem, mount_device
 
 file_system = dict()
 file_system['source'] = FileSystem(config.source)
@@ -31,7 +31,30 @@ def deselect_file():
 @app.route('/mount', methods=['POST'])
 def mount():
 
-    print "mounting "+ request.form['side']
+    try:
+
+        print conf[request.form['side']]['mount_command']
+        mount_device(command=conf[request.form['side']]['mount_command'], post_delay=10)
+
+        file_list = file_system[request.form['side']].get_file_list()
+
+    except Exception as e:
+
+        return render_template("file_error.html",
+                               error_message=str(e),
+                               side=request.form['side'],
+                               action={'mount': "mount_"+request.form['side'],
+                                       'refresh': "refresh_"+request.form['side']},
+                               config=conf[request.form['side']])
+
+    else:
+
+        return render_template("file_table.html", files=file_list,
+                               side=request.form['side'],
+                               selector_classes={'folder': "folder_selector_"+request.form['side'],
+                                                 'file': "file_selector_"+request.form['side']},
+                               select_size_id="selected_size_id_"+request.form['side'],
+                               current_folder=file_system[request.form['side']].get_current_folder_relative())
 
 
 

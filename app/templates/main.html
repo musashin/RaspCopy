@@ -9,8 +9,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
   <body>
-     <div class="row-fluid">
-       <div class="span6">
+  <div class="container-fluid">
+     <div class="row">
+       <div class="col-md-6">
             <h1><p class="text-center">RaspBerry</p></h1>
             <div class="table-responsive">
                  <div id="source_file_table">
@@ -18,7 +19,7 @@
                  </div>
             </div>
        </div>
-       <div class="span6">
+       <div class="col-md-6">
             <h1><p class="text-center">Key</p></h1>
             <div class="table-responsive">
                     <div id="destination_file_table">
@@ -29,16 +30,19 @@
 
      </div>
 
+      <div class="col-md-12">
+          <p id="status">status</p>
+      </div>
+      <div class="col-md-12">
      <div class="btn-group" role="group">
             <button id=copy class="btn btn-info btn-large"><i class="glyphicon glyphicon-chevron-right"></i> Copy</button>
      </div>
+      </div>
+      </div>
   </body>
 </html>
 
 <script>
-    var total_size = 0
-    var selected_files = new Array();
-
 
     $( document ).ready( function(){
         set_folder('source','home')
@@ -77,10 +81,17 @@
 
      $("#copy").click( function(){
 
-      $.post("/copy");
+      $.post("/copy",{},function(){setTimeout('update_copy_status()', 15000);});
 
 
 
     });
+
+    function update_copy_status()
+    {
+        $("#status").text("Hello world!");
+
+       // Not done setTimeout('update_copy_status()', 60000);
+    }
 
  </script>

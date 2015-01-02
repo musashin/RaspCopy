@@ -8,7 +8,7 @@ _max_background_job_count = 1
 def is_job_running(job_name):
     return any(t for t in enumerate() if t.name == job_name)
 
-def get_status(job_name):
+def get_background_status(job_name):
 
     job_status = None
 
@@ -96,6 +96,6 @@ if __name__ == "__main__":
 
     while True:
         time.sleep(0.5)
-        print get_status('print_time')
+        print get_background_status('print_time')
 
 

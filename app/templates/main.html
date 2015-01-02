@@ -44,6 +44,8 @@
 
 <script>
 
+    var gStatusRefreshPeriodMs = 1000;
+
     $( document ).ready( function(){
         set_folder('source','home')
         set_folder('destination','home')
@@ -81,17 +83,28 @@
 
      $("#copy").click( function(){
 
-      $.post("/copy",{},function(){setTimeout('update_copy_status()', 15000);});
+      $.post("/copy",{},function(){setTimeout('update_copy_status()', gStatusRefreshPeriodMs);});
 
 
 
     });
 
+    var toto = 1;
+
     function update_copy_status()
     {
-        $("#status").text("Hello world!");
 
-       // Not done setTimeout('update_copy_status()', 60000);
+        $.getJSON("/copy_status",function(result){
+
+            if(!result.complete){
+                $("#status").text(result.copy_status + "  " + result.file_percent + "  " + result.overall_percent);
+                setTimeout('update_copy_status()', gStatusRefreshPeriodMs);
+            }
+            else {
+                $("#status").text("complete")
+            }
+        })
+
     }
 
  </script>

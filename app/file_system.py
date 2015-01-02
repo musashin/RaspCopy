@@ -4,8 +4,12 @@ __author__ = 'Nicolas'
 from os import listdir, walk, sep, stat
 from os.path import isfile, getsize, join, normpath, basename
 from utils.hurry import filesize
-from async_task import async, get_status
+from async_task import async, get_background_status
 import subprocess
+
+copy_in_progress = False
+copy_percent = 0
+
 
 class FileSystem:
 
@@ -164,10 +168,10 @@ def copy_folder(source_folder, destination_folder, overwrite, execution_thread=N
     all_files_in_source = [f for f in listdir(source_folder) if isfile(join(source_folder, f))]
 
     for file_to_copy in all_files_in_source:
-        copy_file(source_file= join(source_folder, file_to_copy),
-                  destination_file= join(destination_folder, file_to_copy),
-                  overwrite= overwrite,
-                  report_delegate= lambda status, percent: execution_thread.report_status(status, percent))
+        copy_file(source_file=join(source_folder, file_to_copy),
+                  destination_file=join(destination_folder, file_to_copy),
+                  overwrite=overwrite,
+                  report_delegate=lambda status, percent: execution_thread.report_status(status, percent))
 
     if execution_thread:
         execution_thread.remove_from_jobs()
@@ -175,17 +179,35 @@ def copy_folder(source_folder, destination_folder, overwrite, execution_thread=N
 @async
 def copy_files(files_to_copy, destination_folder, overwrite, execution_thread=None):
 
-    print files_to_copy
-    for file_to_copy in files_to_copy:
+    global copy_in_progress, copy_percent
 
+    copy_in_progress = True
 
-        copy_file(source_file= join(file_to_copy['folder'], file_to_copy['filename']),
-                  destination_file= join(destination_folder, file_to_copy['filename']),
-                  overwrite= overwrite,
-                  report_delegate= lambda status, percent: execution_thread.report_status(status, percent))
+    file_count = 0
 
-    if execution_thread:
-        execution_thread.remove_from_jobs()
+    try:
+        for file_to_copy in files_to_copy:
+
+            file_count += 1
+            copy_percent = str(round(float(file_count)/float(len(files_to_copy)*100.0)))
+
+            copy_file(source_file=join(file_to_copy['folder'], file_to_copy['filename']),
+                      destination_file=join(destination_folder, file_to_copy['filename']),
+                      overwrite=overwrite,
+                      report_delegate=lambda status, percent: execution_thread.report_status(status, percent))
+
+    finally:
+        if execution_thread:
+            copy_in_progress = False
+            execution_thread.remove_from_jobs()
+
+def get_copy_status():
+
+    if copy_in_progress:
+        file_copy_status = get_background_status('copy_files')
+        return file_copy_status['status'], file_copy_status['percent'], copy_percent
+    else:
+        return None
 
 
 if __name__ == '__main__':
@@ -208,5 +230,5 @@ if __name__ == '__main__':
 
     while True:
         time.sleep(0.5)
-        print get_status('copy_folder')
+        print get_background_status('copy_folder')
 

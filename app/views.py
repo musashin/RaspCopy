@@ -1,8 +1,8 @@
 
 from app import app
-from flask import render_template, request
+from flask import render_template, request, jsonify
 import config
-from file_system import FileSystem, mount_device, copy_files
+from file_system import FileSystem, mount_device, copy_files, get_copy_status
 
 file_system = dict()
 file_system['source'] = FileSystem(config.source)
@@ -27,6 +27,18 @@ def deselect_file():
 
     return file_system[request.form['side']].remove_selected_file(request.form['file_name'])
 
+@app.route('/copy_status')
+def get_current_user():
+
+    copy_status = get_copy_status()
+
+    if copy_status:
+        return jsonify(complete=False,
+                       copy_status=copy_status[0],
+                       file_percent=copy_status[1],
+                       overall_percent=copy_status[2])
+    else:
+        return jsonify(complete=True)
 
 @app.route('/copy', methods=['POST'])
 def copy():

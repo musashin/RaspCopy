@@ -53,7 +53,7 @@ class BackgroundJob(Thread):
 
         _status_lock.acquire()
         self.status['status'] = str(status)
-        self.status['percent'] = str(percent)
+        self.status['percent'] = percent
         _status_lock.release()
 
     def remove_from_jobs(self):

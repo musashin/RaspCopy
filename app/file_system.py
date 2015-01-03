@@ -153,7 +153,7 @@ def copy_file(source_file, destination_file, overwrite, report_delegate=None):
             cur_block_pos += block_size
 
             if report_delegate:
-                report_delegate(status='copying' + basename(source_file),
+                report_delegate(status='Copying \'' + basename(source_file) + '\'',
                                 percent=round(float(cur_block_pos)/float(src_size)*100.0))
 
             if not cur_block:
@@ -188,20 +188,15 @@ def copy_files(files_to_copy, destination_folder, overwrite, execution_thread=No
     try:
         for file_to_copy in files_to_copy:
 
-            file_count += 1
-
             copy_percent = round(float(file_count)/float(len(files_to_copy))*100.0)
 
-            print file_count
-
-            print len(files_to_copy)
-
-            print copy_percent
 
             copy_file(source_file=join(file_to_copy['folder'], file_to_copy['filename']),
                       destination_file=join(destination_folder, file_to_copy['filename']),
                       overwrite=overwrite,
                       report_delegate=lambda status, percent: execution_thread.report_status(status, percent))
+
+            file_count += 1
 
     finally:
         if execution_thread:

@@ -33,12 +33,16 @@
       <div class="col-md-12" >
           <div class="collapse" id="StatusPane">
               <p id="status">status</p>
-              <!--div class="progress">
-                <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
-                    60%
-             </div-->
-          </div>
-
+              <div class="progress">
+                <div class="progress-bar" role="progressbar" id="fileCopyProgress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+                    0%
+                </div>
+              </div>
+              <div class="progress">
+                <div class="progress-bar" role="progressbar" id="overallCopyProgress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+                    0%
+                </div>
+              </div>
           </div>
       </div>
       <div class="col-md-12">
@@ -108,8 +112,16 @@
 
                 $('#StatusPane').collapse('show');
 
-                $("#status").text(result.copy_status + "  " + result.file_percent.toString() + "  " + result.overall_percent.toString());
-                
+                $("#status").text(result.copy_status);
+
+                $('#fileCopyProgress').css('width', result.file_percent+'%').attr('aria-valuenow', result.file_percent);
+
+                $('#fileCopyProgress').text(result.file_percent.toString()+'%');
+
+                $('#overallCopyProgress').css('width', result.overall_percent+'%').attr('aria-valuenow', result.overall_percent);
+
+                $('#overallCopyProgress').text(result.overall_percent.toString()+'%');
+
                 setTimeout('update_copy_status()', gStatusRefreshPeriodMs);
             }
             else {

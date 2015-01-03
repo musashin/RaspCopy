@@ -51,6 +51,10 @@
         set_folder('destination','home')
     });
 
+    function refresh(){
+        set_folder('source','')
+        set_folder('destination','')
+    }
 
     function set_folder(side,folder){
 
@@ -102,6 +106,7 @@
             }
             else {
                 $("#status").text("complete")
+                refresh()
             }
         })
 

@@ -84,6 +84,8 @@ def open_folder():
             file_system[request.form['side']].select_home()
         elif request.form['folder'] == '..':
             file_system[request.form['side']].select_up()
+        elif not request.form['folder']:
+            file_system[request.form['side']].select_subfolder(file_system[request.form['side']].current_folder)
         else:
             file_system[request.form['side']].select_subfolder(request.form['folder'])
 

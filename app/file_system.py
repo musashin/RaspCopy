@@ -189,7 +189,14 @@ def copy_files(files_to_copy, destination_folder, overwrite, execution_thread=No
         for file_to_copy in files_to_copy:
 
             file_count += 1
-            copy_percent = str(round(float(file_count)/float(len(files_to_copy)*100.0)))
+
+            copy_percent = str(round(float(file_count)/float(len(files_to_copy))*100.0))
+
+            print file_count
+
+            print len(files_to_copy)
+
+            print copy_percent
 
             copy_file(source_file=join(file_to_copy['folder'], file_to_copy['filename']),
                       destination_file=join(destination_folder, file_to_copy['filename']),

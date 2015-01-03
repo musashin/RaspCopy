@@ -30,8 +30,10 @@
 
      </div>
 
-      <div class="col-md-12">
-          <p id="status">status</p>
+      <div class="col-md-12" >
+          <div class="collapse" id="StatusPane">
+            <p id="status">status</p>
+          </div>
       </div>
       <div class="col-md-12">
      <div class="btn-group" role="group">
@@ -89,11 +91,7 @@
 
       $.post("/copy",{},function(){setTimeout('update_copy_status()', gStatusRefreshPeriodMs);});
 
-
-
     });
-
-    var toto = 1;
 
     function update_copy_status()
     {
@@ -101,12 +99,18 @@
         $.getJSON("/copy_status",function(result){
 
             if(!result.complete){
+
+                $('#StatusPane').collapse('show');
+
                 $("#status").text(result.copy_status + "  " + result.file_percent + "  " + result.overall_percent);
                 setTimeout('update_copy_status()', gStatusRefreshPeriodMs);
             }
             else {
                 $("#status").text("complete")
-                refresh()
+
+                $('#StatusPane').collapse('hide');
+
+                set_folder('destination','')
             }
         })
 

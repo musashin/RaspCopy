@@ -1,5 +1,4 @@
-__author__ = 'Nicolas'
-
+from __future__ import division
 
 from os import listdir, walk, sep, stat
 from os.path import isfile, getsize, join, normpath, basename
@@ -181,27 +180,38 @@ def copy_files(files_to_copy, destination_folder, overwrite, execution_thread=No
 
     global copy_in_progress, copy_percent
 
-    copy_in_progress = True
+    total_size_to_copy=sum([f['size'] for f in files_to_copy])
 
-    file_count = 0
+    copy_in_progress = True
 
     try:
         for file_to_copy in files_to_copy:
 
-            copy_percent = round(float(file_count)/float(len(files_to_copy))*100.0)
-
+            status_delegate = make_status_update_delegate(thread=execution_thread,
+                                                          total_file_size=file_to_copy['size'],
+                                                          total_size_to_copy=total_size_to_copy)
 
             copy_file(source_file=join(file_to_copy['folder'], file_to_copy['filename']),
                       destination_file=join(destination_folder, file_to_copy['filename']),
                       overwrite=overwrite,
-                      report_delegate=lambda status, percent: execution_thread.report_status(status, percent))
-
-            file_count += 1
+                      report_delegate=status_delegate)
 
     finally:
         if execution_thread:
             copy_in_progress = False
             execution_thread.remove_from_jobs()
+
+def make_status_update_delegate(thread, total_file_size, total_size_to_copy):
+    global copy_percent
+    original_copy_percent = copy_percent
+    
+    def update_copy_status(status, percent):
+        global copy_percent
+
+        copy_percent = round(original_copy_percent + ((total_file_size * float(percent) / 100.0)/total_size_to_copy)*100.0)
+
+        thread.report_status(status, percent)
+    return update_copy_status
 
 def get_copy_status():
 

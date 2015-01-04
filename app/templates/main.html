@@ -51,6 +51,8 @@
       </div>
       </div>
   </body>
+
+    {% include 'error_dialog.html' %}
 </html>
 
 <script>
@@ -96,9 +98,22 @@
 
     }
 
-     $("#copy").click( function(){
+    $("#copy").click( function(){
 
-      $.post("/copy",{},function(){setTimeout('update_copy_status()', gStatusRefreshPeriodMs);});
+      $.post("/copy",{},function(data ){
+
+        if(data.error){
+            $("#errorDialogMessage").html("<p>"+data.message+"</p>");
+            $("#errorDialogMessageDetails").text(data.error_details);
+
+            $('#errorDialog').modal('show');
+        }
+        else {
+
+            setTimeout('update_copy_status()', gStatusRefreshPeriodMs);
+        }
+
+        });
 
     });
 

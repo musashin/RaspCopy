@@ -204,7 +204,7 @@ def copy_files(files_to_copy, destination_folder, overwrite, execution_thread=No
 def make_status_update_delegate(thread, total_file_size, total_size_to_copy):
     global copy_percent
     original_copy_percent = copy_percent
-    
+
     def update_copy_status(status, percent):
         global copy_percent
 

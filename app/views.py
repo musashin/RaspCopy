@@ -1,6 +1,6 @@
 
 from app import app
-from flask import render_template, request, jsonify
+from flask import render_template, request, jsonify, flash
 import config
 from file_system import FileSystem, mount_device, copy_files, get_copy_status
 
@@ -42,9 +42,17 @@ def get_current_user():
 
 @app.route('/copy', methods=['POST'])
 def copy():
-    copy_files(files_to_copy = file_system['source'].selected_files, destination_folder = file_system['destination'].current_folder , overwrite = True)
 
-    return ""
+    try:
+        copy_files(files_to_copy=file_system['source'].selected_files,
+                   destination_folder = file_system['destination'].current_folder,
+                   overwrite = True)
+
+    except Exception as e:
+        return jsonify(error=True, message='Copy Error', error_details=str(e))
+
+    else:
+        return jsonify(error=False)
 
 @app.route('/mount', methods=['POST'])
 def mount():

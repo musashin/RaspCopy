@@ -2,8 +2,17 @@
 from threading import *
 
 _background_jobs_status = dict()
+_background_jobs_failed = list()
 _status_lock = Lock()
 _max_background_job_count = 1
+
+
+def get_failed_job():
+    if not _background_jobs_failed:
+        return None
+    else:
+        return _background_jobs_failed.pop()
+
 
 def is_job_running(job_name):
     return any(t for t in enumerate() if t.name == job_name)
@@ -36,7 +45,7 @@ class BackgroundJob(Thread):
         self.job = job
         self.args = args
         self.kwargs = kwargs
-        self.status = dict()
+        self.status = {'status': 'Not Started', 'percent': '0'}
         if self.job_count < _max_background_job_count:
             _background_jobs_status[self.name] = self.status
             self.job_count += 1
@@ -44,10 +53,14 @@ class BackgroundJob(Thread):
             raise Exception('Only {0!s} job supported'.format(_max_background_job_count))
 
     def run(self):
-
-        named_args = self.kwargs
-        named_args['execution_thread']= self
-        self.job(*self.args, **self.kwargs)
+        try:
+            named_args = self.kwargs
+            named_args['execution_thread']= self
+            self.job(*self.args, **self.kwargs)
+        except Exception as e:
+            _status_lock.acquire()
+            _background_jobs_failed.append((self.name, str(e)))
+            _status_lock.release()
 
     def report_status(self, status, percent):
 

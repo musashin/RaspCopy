@@ -62,6 +62,7 @@
     $( document ).ready( function(){
         set_folder('source','home')
         set_folder('destination','home')
+         $('#StatusPane').collapse({'toggle': false});
     });
 
     function refresh(){
@@ -122,7 +123,21 @@
 
         $.getJSON("/copy_status",function(result){
 
-            if(!result.complete){
+            if(result.error){
+
+                $('#StatusPane').collapse('hide');
+
+                set_folder('destination','')
+
+                $("#errorDialogMessage").html("<p>"+result.message+"</p>");
+                $("#errorDialogMessageDetails").text(result.error_details);
+
+                $('#errorDialog').modal('show');
+
+
+
+            }
+            else if(!result.complete){
 
                 $('#StatusPane').collapse('show');
 
@@ -137,7 +152,6 @@
                 setTimeout('update_copy_status()', gStatusRefreshPeriodMs);
             }
             else {
-                $("#status").text("complete")
 
                 $('#StatusPane').collapse('hide');
 

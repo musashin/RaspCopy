@@ -3,6 +3,8 @@ from app import app
 from flask import render_template, request, jsonify, flash
 import config
 from file_system import FileSystem, mount_device, copy_files, get_copy_status
+from async_task import get_failed_job
+import time
 
 file_system = dict()
 file_system['source'] = FileSystem(config.source)
@@ -32,22 +34,28 @@ def get_current_user():
 
     copy_status = get_copy_status()
 
-    if copy_status:
-        return jsonify(complete=False,
+    failed_jobs = get_failed_job()
+    if failed_jobs:
+        return jsonify(error=True,
+                       complete=False,
+                       message='Error Executing Operation \''+failed_jobs[0]+'\'',
+                       error_details=str(failed_jobs[1]))
+    elif copy_status:
+        return jsonify(error=False,
+                       complete=False,
                        copy_status=copy_status[0],
                        file_percent=copy_status[1],
                        overall_percent=copy_status[2])
     else:
-        return jsonify(complete=True)
+        return jsonify(error=False, complete=True)
 
 @app.route('/copy', methods=['POST'])
 def copy():
-
+    #TODO, prevent multiple operations!!
     try:
         copy_files(files_to_copy=file_system['source'].selected_files,
-                   destination_folder = file_system['destination'].current_folder,
-                   overwrite = True)
-
+                   destination_folder=file_system['destination'].current_folder,
+                   overwrite=True)
     except Exception as e:
         return jsonify(error=True, message='Copy Error', error_details=str(e))
 

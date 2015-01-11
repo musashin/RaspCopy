@@ -5,6 +5,7 @@ from os.path import isfile, getsize, join, normpath, basename
 from utils.hurry import filesize
 from async_task import async, get_background_status
 import subprocess
+import time
 
 copy_in_progress = False
 copy_percent = 0
@@ -197,9 +198,12 @@ def copy_files(files_to_copy, destination_folder, overwrite, execution_thread=No
                       report_delegate=status_delegate)
 
     finally:
+
+        copy_in_progress = False
+
         if execution_thread:
-            copy_in_progress = False
             execution_thread.remove_from_jobs()
+
 
 def make_status_update_delegate(thread, total_file_size, total_size_to_copy):
     global copy_percent

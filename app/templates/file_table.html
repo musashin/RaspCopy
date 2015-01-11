@@ -1,11 +1,13 @@
 
-<h2><span class="glyphicon glyphicon-folder-open"></span>{{current_folder}}</h2>
+<h2><span class="glyphicon glyphicon-folder-open"></span>    {{current_folder}}</h2>
+
+
 <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th>File</th>
-                    <th>Size</th>
-                    <th>Select</th>
+                    <th class="col-md-6">File</th>
+                    <th class="col-md-2">Size</th>
+                    <th class="col-md-1">Select</th>
                 </tr>
             </thead>
             <tbody>
@@ -17,8 +19,7 @@
                             <td><span class="glyphicon glyphicon-folder-close"></span>   {{file.filename}}</td>
                         {% endif %}
                         <td>{{file.filesize_human}}</td>
-                        <td>
-                            <p class="text-center">
+                        <td style="text-align:center;">
                                 <label class="checkbox">
                                     {% if file.isfile %}
                                         <input type="checkbox"  size={{file.filesize_bytes}} value="{{file.filename}}" class="{{selector_classes.file}}" {{'checked' if file.isselected }}>
@@ -26,7 +27,6 @@
                                          <input type="checkbox"  size={{file.filesize_bytes}} value="{{file.filename}}" class="{{selector_classes.folder}}">
                                     {% endif %}
                                 </label>
-                            </p>
                         </td>
                     </tr>
                 {% endfor %}

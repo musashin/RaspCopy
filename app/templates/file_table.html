@@ -34,6 +34,9 @@
     </table>
 
 <p class="muted" id="filesize">Total Size Selected: <span id="{{select_size_id}}">0</span></p>
+ <div class="btn-group" role="group">
+            <button id=delete_{{side}} class="btn btn-large"><i class="glyphicon glyphicon-trash"></i></button>
+     </div>
 <script>
 
     //Bindings
@@ -54,6 +57,12 @@
         if( $(this).is(':checked') ){
          set_folder('{{side}}',$(this).attr('value'))
         }
+
+    });
+
+    $("#delete_{{side}}").click( function(){
+
+       $('#confirmDialog').modal('show');
 
     });
 </script>

@@ -62,6 +62,11 @@ def copy():
     else:
         return jsonify(error=False)
 
+@app.route('/selectedFiles', methods=['POST'])
+def selected_files():
+       return render_template("file_list.html",
+                               files=file_system[request.form['side']].selected_files)
+
 @app.route('/mount', methods=['POST'])
 def mount():
 

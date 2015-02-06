@@ -5,8 +5,8 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title">Are you sure you want to delete?</h4>
       </div>
-      <div class="modal-body">
-        <p>One fine body&hellip;</p>
+      <div class="modal-body" >
+        <p id="confirmBody"></p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
@@ -19,6 +19,7 @@
 <script>
  $("#deleteFiles").click( function(){
 
-      alert('Time to delete!')
+      alert('Time to delete!'+$(this).attr('value'))
+
     });
 </script>

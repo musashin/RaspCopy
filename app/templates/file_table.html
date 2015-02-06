@@ -34,9 +34,11 @@
     </table>
 
 <p class="muted" id="filesize">Total Size Selected: <span id="{{select_size_id}}">0</span></p>
+<p>
  <div class="btn-group" role="group">
             <button id=delete_{{side}} class="btn btn-large"><i class="glyphicon glyphicon-trash"></i></button>
      </div>
+ </p>
 <script>
 
     //Bindings
@@ -62,6 +64,14 @@
 
     $("#delete_{{side}}").click( function(){
 
+       $.post("/selectedFiles",{side: "{{side}}"}
+        ,function(data,status){
+
+        $("#confirmBody").html(data);
+      });
+
+
+       $("#deleteFiles").val("{{side}}");
        $('#confirmDialog').modal('show');
 
     });

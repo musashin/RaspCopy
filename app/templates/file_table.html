@@ -70,9 +70,18 @@
         $("#confirmBody").html(data);
       });
 
-
-       $("#deleteFiles").val("{{side}}");
+       $('#confirmDialogYes').unbind('click');
+       $('#confirmDialogYes')[0].setAttribute('onclick','deleteSelectedFiles("{{side}}")');
+       $("#confirmDialogYes").val("{{side}}");
        $('#confirmDialog').modal('show');
 
+
     });
+
+
+  function deleteSelectedFiles(side){
+
+    alert('Time to delete!'+ side);
+  }
+
 </script>

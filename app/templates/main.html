@@ -59,6 +59,10 @@ td input[type="checkbox"] {
      <div class="btn-group" role="group">
             <button id=copy class="btn btn-info btn-large"><i class="glyphicon glyphicon-chevron-right"></i> Copy</button>
      </div>
+
+          <p >Test area <span id="test_string">0</span></p>
+
+
       </div>
       </div>
   </body>
@@ -172,6 +176,54 @@ td input[type="checkbox"] {
             }
         })
 
+    }
+
+    function deleteSelectedFiles(side){
+
+        alert('Time to delete!'+ side);
+        $.post("/deleteFiles",{side: side},function(data ){
+
+        if(data.error){
+            $("#errorDialogMessage").html("<p>"+data.message+"</p>");
+            $("#errorDialogMessageDetails").text(data.error_details);
+
+            $('#errorDialog').modal('show');
+        }
+        else {
+
+            setTimeout(function() { indicate_action_in_progress('delete_files')}, gStatusRefreshPeriodMs);
+        }
+
+        });
+    }
+
+    var testVar = 0;
+    function indicate_action_in_progress(background_job_name)
+    {
+
+          $.getJSON("/job_status",{job_name: background_job_name}, function(result){
+
+            if(result.error){
+
+                $("#errorDialogMessage").html("<p>"+result.message+"</p>");
+                $("#errorDialogMessageDetails").text(result.error_details);
+
+                $('#errorDialog').modal('show');
+
+            }
+            else if(!result.complete){
+
+                $("#test_string").text(testVar);
+
+                testVar=testVar+1;
+
+                 setTimeout(function() { indicate_action_in_progress('delete_files')}, gStatusRefreshPeriodMs);
+            }
+            else {
+
+                //TODO
+            }
+        })
     }
 
  </script>

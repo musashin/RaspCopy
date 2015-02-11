@@ -1,6 +1,6 @@
 from __future__ import division
 
-from os import listdir, walk, sep, stat
+from os import listdir, walk, sep, stat, remove
 from os.path import isfile, getsize, join, normpath, basename
 from utils.hurry import filesize
 from async_task import async, get_background_status
@@ -99,11 +99,9 @@ class FileSystem:
 
         return size
 
-
 @async
 def mount_device(command, post_delay=0, execution_thread=None):
 
-    print command
     if execution_thread:
         execution_thread.report_status(status='mounting',
                                        percent='0')
@@ -201,6 +199,21 @@ def copy_files(files_to_copy, destination_folder, overwrite, execution_thread=No
 
         copy_in_progress = False
 
+        if execution_thread:
+            execution_thread.remove_from_jobs()
+
+@async
+def delete_files(files_to_delete, execution_thread=None):
+
+    try:
+        for fileToDelete in files_to_delete:
+            execution_thread.report_status(status='deleting '+ fileToDelete['filename'],
+                                           percent='-')
+            print "deleting" + str(join(fileToDelete['folder'], fileToDelete['filename']))
+            #remove(join(fileToDelete['folder'], fileToDelete['filename']))
+            time.sleep(10)
+
+    finally:
         if execution_thread:
             execution_thread.remove_from_jobs()
 

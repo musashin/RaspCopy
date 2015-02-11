@@ -2,8 +2,8 @@
 from app import app
 from flask import render_template, request, jsonify, flash
 import config
-from file_system import FileSystem, mount_device, copy_files, get_copy_status
-from async_task import get_failed_job
+from file_system import FileSystem, mount_device, copy_files, get_copy_status,delete_files
+from async_task import get_failed_job, get_background_status
 import time
 
 file_system = dict()
@@ -30,7 +30,7 @@ def deselect_file():
     return file_system[request.form['side']].remove_selected_file(request.form['file_name'])
 
 @app.route('/copy_status')
-def get_current_user():
+def get_copy_job_status():
 
     copy_status = get_copy_status()
 
@@ -49,6 +49,28 @@ def get_current_user():
     else:
         return jsonify(error=False, complete=True)
 
+
+@app.route('/job_status')
+def job_status():
+
+
+    status =  get_background_status(request.args['job_name'])
+
+    if status:
+        return jsonify(error=False,
+                       complete=False)
+    else:
+        failed_jobs = get_failed_job()
+        if failed_jobs:
+            return jsonify(error=True,
+                           complete=False,
+                           message='Error Executing Operation \''+failed_jobs[0]+'\'',
+                           error_details=str(failed_jobs[1]))
+        else:
+            return jsonify(error=False,
+                           complete=True)
+
+
 @app.route('/copy', methods=['POST'])
 def copy():
     #TODO, prevent multiple operations!!
@@ -66,6 +88,18 @@ def copy():
 def selected_files():
        return render_template("file_list.html",
                                files=file_system[request.form['side']].selected_files)
+
+@app.route('/deleteFiles', methods=['POST'])
+def deleteFiles():
+     #TODO, prevent multiple operations!!
+    try:
+        delete_files(files_to_delete=file_system[request.form['side']].selected_files)
+    except Exception as e:
+        return jsonify(error=True, message='Delete Error', error_details=str(e))
+
+    else:
+        return jsonify(error=False)
+
 
 @app.route('/mount', methods=['POST'])
 def mount():

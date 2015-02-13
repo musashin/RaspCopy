@@ -35,8 +35,11 @@
 
 <p class="muted" id="filesize">Total Size Selected: <span id="{{select_size_id}}">0</span></p>
 <p>
- <div class="btn-group" role="group">
-            <button id=delete_{{side}} class="btn btn-large"><i class="glyphicon glyphicon-trash"></i></button>
+    <div class="btn-group text-center" role="group">
+            <button id=delete_{{side}} class="btn btn-large">
+                <i class="fa fa-cog fa-spin fa-2x" id=delete_files_spin_{{side}} style="display:none;" ></i>
+                <i class="fa fa-trash fa-2x" id="delete_files_icon_{{side}}"></i>
+            </button>
      </div>
  </p>
 <script>
@@ -74,7 +77,6 @@
        $('#confirmDialogYes')[0].setAttribute('onclick','deleteSelectedFiles("{{side}}")');
        $("#confirmDialogYes").val("{{side}}");
        $('#confirmDialog').modal('show');
-
 
     });
 

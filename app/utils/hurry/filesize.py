@@ -106,5 +106,5 @@ def size(bytes, system=traditional):
             suffix = singular
         else:
             suffix = multiple
-    return str(amount) + suffix
+    return str(amount) + ' ' +suffix + 'b'
 

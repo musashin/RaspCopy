@@ -209,10 +209,10 @@ td input[type="checkbox"] {
             $('#'+spinnerID).hide();
             $('#'+iconID).show();
         }
-
     }
 
-    var testVar = 0;
+
+    var background_job_status_str = ''
     function indicate_action_in_progress(background_job_name,side,start)
     {
 
@@ -228,13 +228,18 @@ td input[type="checkbox"] {
             }
             else if(!result.complete){
 
-                $("#test_string").text(testVar);
-
-                testVar=testVar+1;
+                //console.log(result.status)
+                //$("#test_string").text(result.status);
 
                 if(start){
                     animate(true, background_job_name, side);
                 }
+
+                if(result.status != background_job_status_str)
+                {
+                    set_folder(side,'');
+                }
+                background_job_status_str = result.status
 
                 setTimeout(function() { indicate_action_in_progress(background_job_name,side,false)}, gStatusRefreshPeriodMs);
             }

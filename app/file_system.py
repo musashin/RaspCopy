@@ -209,9 +209,9 @@ def delete_files(files_to_delete, execution_thread=None):
         for fileToDelete in files_to_delete:
             execution_thread.report_status(status='deleting '+ fileToDelete['filename'],
                                            percent='-')
-            print "deleting" + str(join(fileToDelete['folder'], fileToDelete['filename']))
-            #remove(join(fileToDelete['folder'], fileToDelete['filename']))
-            time.sleep(10)
+            #print "deleting" + str(join(fileToDelete['folder'], fileToDelete['filename']))
+            remove(join(fileToDelete['folder'], fileToDelete['filename']))
+            time.sleep(0.5)
 
     finally:
         if execution_thread:

@@ -53,12 +53,12 @@ def get_copy_job_status():
 @app.route('/job_status')
 def job_status():
 
-
-    status =  get_background_status(request.args['job_name'])
+    status = get_background_status(request.args['job_name'])
 
     if status:
         return jsonify(error=False,
-                       complete=False)
+                       complete=False,
+                       status = status['status'])
     else:
         failed_jobs = get_failed_job()
         if failed_jobs:

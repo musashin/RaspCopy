@@ -89,6 +89,10 @@ def selected_files():
        return render_template("file_list.html",
                                files=file_system[request.args['side']].selected_files)
 
+@app.route('/create_dir', methods=['GET'])
+def create_dir():
+       return render_template("choose_dir_name.html")
+
 @app.route('/deleteFiles', methods=['POST'])
 def deleteFiles():
      #TODO, prevent multiple operations!!

@@ -176,6 +176,13 @@ td input[type="checkbox"] {
 
     }
 
+    function createDirectory(side){
+
+        console.log('create dir ' + $('#directory_name').val())
+    }
+
+
+
     function deleteSelectedFiles(side){
 
         $.post("/deleteFiles",{side: side},function(data ){

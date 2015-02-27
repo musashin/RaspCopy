@@ -36,15 +36,19 @@
 <p class="muted" id="filesize">Total Size Selected: <span id="{{select_size_id}}">0</span></p>
 <p>
     <div class="btn-group btn-group-justified" role="group">
-
         <div class="text-center">
             <button id=delete_{{side}} class="btn btn-danger">
                 Delete
                 <i class="fa fa-cog fa-spin fa-1x" id=delete_files_spin_{{side}} style="display:none;" ></i>
                 <i class="fa fa-trash fa-1x" id="delete_files_icon_{{side}}"></i>
             </button>
+             <button id=create_dir_{{side}} class="btn btn-success">
+                Create
+                <i class="fa fa-cog fa-spin fa-1x" id=create_dir_spin_{{side}} style="display:none;" ></i>
+                <i class="fa fa-folder  fa-1x" id="create_dir_icon_{{side}}"></i>
+            </button>
         </div>
-     </div>
+            </div>
  </p>
 <script>
 
@@ -77,8 +81,23 @@
         $("#confirmBody").html(data);
       });
 
+       $("#confirmDialogTitle").text('Are you sure you want to delete:');
        $('#confirmDialogYes').unbind('click');
        $('#confirmDialogYes')[0].setAttribute('onclick','deleteSelectedFiles("{{side}}")');
+       $("#confirmDialogYes").val("{{side}}");
+       $('#confirmDialog').modal('show');
+
+    });
+
+    $("#create_dir_{{side}}").click( function(){
+
+       $.get("/create_dir",function(data,status){
+           $("#confirmBody").html(data);
+        });
+
+       $("#confirmDialogTitle").text('Pick a name for the new directory');
+       $('#confirmDialogYes').unbind('click');
+       $('#confirmDialogYes')[0].setAttribute('onclick','createDirectory()');
        $("#confirmDialogYes").val("{{side}}");
        $('#confirmDialog').modal('show');
 

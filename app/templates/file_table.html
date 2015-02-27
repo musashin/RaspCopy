@@ -71,7 +71,7 @@
 
     $("#delete_{{side}}").click( function(){
 
-       $.post("/selectedFiles",{side: "{{side}}"}
+       $.get("/selectedFiles",{side: "{{side}}"}
         ,function(data,status){
 
         $("#confirmBody").html(data);

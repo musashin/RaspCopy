@@ -84,10 +84,10 @@ def copy():
     else:
         return jsonify(error=False)
 
-@app.route('/selectedFiles', methods=['POST'])
+@app.route('/selectedFiles', methods=['GET'])
 def selected_files():
        return render_template("file_list.html",
-                               files=file_system[request.form['side']].selected_files)
+                               files=file_system[request.args['side']].selected_files)
 
 @app.route('/deleteFiles', methods=['POST'])
 def deleteFiles():

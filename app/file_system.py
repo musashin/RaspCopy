@@ -114,15 +114,15 @@ def mount_device(command, post_delay=0, execution_thread=None):
         execution_thread.remove_from_jobs()
 
 @async
-def umount_device(command, post_delay=0, execution_thread=None):
+def unmount(command, post_delay=0, execution_thread=None):
 
     if execution_thread:
-        execution_thread.report_status(status='mounting',
+        execution_thread.report_status(status='unmounting',
                                        percent='0')
 
     subprocess.call(command)
     time.sleep(post_delay)
-    execution_thread.report_status(status='mounted',
+    execution_thread.report_status(status='unmounted',
                                    percent='100')
     if execution_thread:
         execution_thread.remove_from_jobs()
@@ -218,7 +218,7 @@ def delete_files(files_to_delete, execution_thread=None):
             execution_thread.remove_from_jobs()
 
 @async
-def create_directory(parent_directory, name_of_new_directory, execution_thread=None):
+def create_dir(parent_directory, name_of_new_directory, execution_thread=None):
 
     try:
         execution_thread.report_status(status='creating ' + name_of_new_directory,

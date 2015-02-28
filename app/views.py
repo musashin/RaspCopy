@@ -2,7 +2,7 @@
 from app import app
 from flask import render_template, request, jsonify, flash
 import config
-from file_system import FileSystem, mount_device, copy_files, get_copy_status, delete_files, create_directory
+from file_system import FileSystem, mount_device, copy_files, get_copy_status, delete_files, create_dir, unmount
 from async_task import get_failed_job, get_background_status
 import time
 
@@ -90,12 +90,12 @@ def selected_files():
                                files=file_system[request.args['side']].selected_files)
 
 @app.route('/create_dir',  methods=['GET', 'POST'])
-def create_dir():
+def create_directory():
     if request.method == 'POST':
         try:
 
-            create_directory(parent_directory=file_system[request.form['side']].current_folder,
-                             name_of_new_directory=request.form['name'])
+            create_dir(parent_directory=file_system[request.form['side']].current_folder,
+                       name_of_new_directory=request.form['name'])
         except Exception as e:
             return jsonify(error=True, message='Could not create directory', error_details=str(e))
         else:
@@ -115,14 +115,22 @@ def deleteFiles():
     else:
         return jsonify(error=False)
 
+@app.route('/unmount', methods=['POST'])
+def unmount_method():
+     #TODO, prevent multiple operations!!
+    try:
+        unmount(command=conf[request.form['side']]['unmount_command'], post_delay=1)
+    except Exception as e:
+        return jsonify(error=True, message='cannot eject', error_details=str(e))
+    else:
+        return jsonify(error=False)
 
 @app.route('/mount', methods=['POST'])
 def mount():
 
     try:
 
-        print conf[request.form['side']]['mount_command']
-        mount_device(command=conf[request.form['side']]['mount_command'], post_delay=10)
+        mount_device(command=conf[request.form['side']]['mount_command'], post_delay=1)
 
         file_list = file_system[request.form['side']].get_file_list()
 
@@ -177,4 +185,5 @@ def open_folder():
                                selector_classes={'folder': "folder_selector_"+request.form['side'],
                                                  'file': "file_selector_"+request.form['side']},
                                select_size_id="selected_size_id_"+request.form['side'],
-                               current_folder=file_system[request.form['side']].get_current_folder_relative())
+                               current_folder=file_system[request.form['side']].get_current_folder_relative(),
+                               config=conf[request.form['side']])

@@ -47,6 +47,14 @@
                 <i class="fa fa-cog fa-spin fa-1x" id=create_dir_spin_{{side}} style="display:none;" ></i>
                 <i class="fa fa-folder  fa-1x" id="create_dir_icon_{{side}}"></i>
             </button>
+            {% if config['unmount_command'] %}
+             <button id=unmount_{{side}} class="btn btn-warning">
+                Eject
+                <i class="fa fa-cog fa-spin fa-1x" id=unmount_spin_{{side}} style="display:none;" ></i>
+                <i class="fa fa-eject  fa-1x" id="unmount_icon_{{side}}"></i>
+            </button>
+            {% endif %}
+
         </div>
             </div>
  </p>
@@ -98,6 +106,18 @@
        $("#confirmDialogTitle").text('Pick a name for the new directory');
        $('#confirmDialogYes').unbind('click');
        $('#confirmDialogYes')[0].setAttribute('onclick','createDirectory("{{side}}")');
+       $("#confirmDialogYes").val("{{side}}");
+       $('#confirmDialog').modal('show');
+
+    });
+
+    $("#unmount_{{side}}").click( function(){
+
+
+       $("#confirmBody").text('');
+       $("#confirmDialogTitle").text('Are you sure you want to eject the media?');
+       $('#confirmDialogYes').unbind('click');
+       $('#confirmDialogYes')[0].setAttribute('onclick','unmount_file_system("{{side}}")');
        $("#confirmDialogYes").val("{{side}}");
        $('#confirmDialog').modal('show');
 

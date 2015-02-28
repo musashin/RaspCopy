@@ -5,7 +5,7 @@ source = dict()
 
 source['directory'] =  r'C:\temp\source'
 source['mount_command'] = 'notepad'
-source['unmount_command'] = 'calc'
+source['unmount_command'] = ''
 
 
 destination = dict()

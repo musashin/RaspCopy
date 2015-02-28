@@ -114,6 +114,27 @@ td input[type="checkbox"] {
 
     }
 
+
+    function unmount_file_system(side){
+
+        $.post("/unmount",
+        {
+            side: side
+        },function(data){
+            if(data.error){
+                $("#errorDialogMessage").html("<p>"+data.message+"</p>");
+                $("#errorDialogMessageDetails").text(data.error_details);
+
+                $('#errorDialog').modal('show');
+            }
+            else {
+
+                setTimeout(function() { indicate_action_in_progress('unmount',side,true)}, gStatusRefreshPeriodMs);
+            }
+        });
+    }
+
+
     $("#copy").click( function(){
 
       $.post("/copy",{},function(data ){
@@ -178,9 +199,6 @@ td input[type="checkbox"] {
 
     function createDirectory(side){
 
-        console.log('create dir ' + $('#directory_name').val())
-
-        // 'name': $('#directory_name').val()
         $.post("/create_dir",{'name': $('#directory_name').val(),'side': side},function(data ){
 
             if(data.error){

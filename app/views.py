@@ -2,7 +2,7 @@
 from app import app
 from flask import render_template, request, jsonify, flash
 import config
-from file_system import FileSystem, mount_device, copy_files, get_copy_status,delete_files
+from file_system import FileSystem, mount_device, copy_files, get_copy_status, delete_files, create_directory
 from async_task import get_failed_job, get_background_status
 import time
 
@@ -89,9 +89,21 @@ def selected_files():
        return render_template("file_list.html",
                                files=file_system[request.args['side']].selected_files)
 
-@app.route('/create_dir', methods=['GET'])
+@app.route('/create_dir',  methods=['GET', 'POST'])
 def create_dir():
-       return render_template("choose_dir_name.html")
+    if request.method == 'POST':
+        try:
+
+            create_directory(parent_directory=file_system[request.form['side']].current_folder,
+                             name_of_new_directory=request.form['name'])
+        except Exception as e:
+            return jsonify(error=True, message='Could not create directory', error_details=str(e))
+        else:
+            return jsonify(error=False)
+    else:
+        return render_template("choose_dir_name.html")
+
+
 
 @app.route('/deleteFiles', methods=['POST'])
 def deleteFiles():
@@ -100,7 +112,6 @@ def deleteFiles():
         delete_files(files_to_delete=file_system[request.form['side']].selected_files)
     except Exception as e:
         return jsonify(error=True, message='Delete Error', error_details=str(e))
-
     else:
         return jsonify(error=False)
 

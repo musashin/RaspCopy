@@ -97,7 +97,7 @@
 
        $("#confirmDialogTitle").text('Pick a name for the new directory');
        $('#confirmDialogYes').unbind('click');
-       $('#confirmDialogYes')[0].setAttribute('onclick','createDirectory()');
+       $('#confirmDialogYes')[0].setAttribute('onclick','createDirectory("{{side}}")');
        $("#confirmDialogYes").val("{{side}}");
        $('#confirmDialog').modal('show');
 

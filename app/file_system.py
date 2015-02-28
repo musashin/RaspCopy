@@ -1,6 +1,6 @@
 from __future__ import division
 
-from os import listdir, walk, sep, stat, remove
+from os import listdir, walk, sep, stat, remove, mkdir
 from os.path import isfile, getsize, join, normpath, basename
 from utils.hurry import filesize
 from async_task import async, get_background_status
@@ -207,7 +207,7 @@ def delete_files(files_to_delete, execution_thread=None):
 
     try:
         for fileToDelete in files_to_delete:
-            execution_thread.report_status(status='deleting '+ fileToDelete['filename'],
+            execution_thread.report_status(status='deleting ' + fileToDelete['filename'],
                                            percent='-')
             #print "deleting" + str(join(fileToDelete['folder'], fileToDelete['filename']))
             remove(join(fileToDelete['folder'], fileToDelete['filename']))
@@ -216,6 +216,21 @@ def delete_files(files_to_delete, execution_thread=None):
     finally:
         if execution_thread:
             execution_thread.remove_from_jobs()
+
+@async
+def create_directory(parent_directory, name_of_new_directory, execution_thread=None):
+
+    try:
+        execution_thread.report_status(status='creating ' + name_of_new_directory,
+                                       percent='-')
+
+        mkdir(join(parent_directory, name_of_new_directory))
+        time.sleep(0.5)
+
+    finally:
+        if execution_thread:
+            execution_thread.remove_from_jobs()
+
 
 
 def make_status_update_delegate(thread, total_file_size, total_size_to_copy):

@@ -5,6 +5,7 @@ from os.path import isfile, getsize, join, normpath, basename
 from utils.hurry import filesize
 from async_task import async, get_background_status
 import subprocess
+import psutil
 import time
 
 copy_in_progress = False
@@ -55,6 +56,10 @@ class FileSystem:
             self.current_folder = self.home_folder
         else:
             self.current_folder = join(self.current_folder, folder)
+
+    def get_statistics(self):
+        print "in"
+        print psutil.disk_usage(self.home_folder)
 
     def get_file_list(self):
 

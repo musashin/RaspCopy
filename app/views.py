@@ -4,6 +4,7 @@ from flask import render_template, request, jsonify, flash
 import config
 from file_system import FileSystem, mount_device, copy_files, get_copy_status, delete_files, create_dir, unmount
 from async_task import get_failed_job, get_background_status
+import json
 import time
 
 file_system = dict()
@@ -58,7 +59,7 @@ def job_status():
     if status:
         return jsonify(error=False,
                        complete=False,
-                       status = status['status'])
+                       status=status['status'])
     else:
         failed_jobs = get_failed_job()
         if failed_jobs:
@@ -88,6 +89,29 @@ def copy():
 def selected_files():
        return render_template("file_list.html",
                                files=file_system[request.args['side']].selected_files)
+
+@app.route('/diskUsage', methods=['GET'])
+def disk_usage():
+        file_system[request.args['side']].get_statistics()
+
+        return json.dumps([ { 'value': 300,
+                        'color':"#F7464A",
+                        'highlight': "#FF5A5E",
+                        'label': "Red"
+                    },
+                    {
+                        'value': 50,
+                        'color': "#46BFBD",
+                        'highlight': "#5AD3D1",
+                        'label': "Green"
+                    },
+                    {
+                        'value': 100,
+                        'color': "#FDB45C",
+                        'highlight': "#FFC870",
+                        'label': "Yellow"
+                    }
+                ])
 
 @app.route('/create_dir',  methods=['GET', 'POST'])
 def create_directory():

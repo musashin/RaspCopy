@@ -1,0 +1,51 @@
+<div class="modal fade" id="file_system_info">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="file_system_info_tile">Infos</h4>
+      </div>
+      <div class="modal-body" >
+        <p id="InfoBody">
+
+            <canvas id="DiskUsage" width="400" height="400"></canvas>
+
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script>
+
+        $('#file_system_info').on('shown.bs.modal', function () {
+
+                var data = [
+                    {
+                        value: 300,
+                        color:"#F7464A",
+                        highlight: "#FF5A5E",
+                        label: "Red"
+                    },
+                    {
+                        value: 50,
+                        color: "#46BFBD",
+                        highlight: "#5AD3D1",
+                        label: "Green"
+                    },
+                    {
+                        value: 100,
+                        color: "#FDB45C",
+                        highlight: "#FFC870",
+                        label: "Yellow"
+                    }
+                ]
+                console.log('test');
+                var ctx = document.getElementById("DiskUsage").getContext("2d");
+                var disk_usage_chart = new Chart(ctx).Pie(data);
+            });
+
+</script>

@@ -58,7 +58,7 @@
              <button id=info_{{side}} class="btn btn-info">
                 Info
                 <i class="fa fa-info-circle  fa-1x"></i>
-            </button>
+             </button>
 
         </div>
             </div>
@@ -83,6 +83,12 @@
         if( $(this).is(':checked') ){
          set_folder('{{side}}',$(this).attr('value'))
         }
+
+    });
+
+    $("#info_{{side}}").click( function(){
+
+        $('#file_system_info').modal('show');
 
     });
 

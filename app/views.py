@@ -90,32 +90,40 @@ def selected_files():
        return render_template("file_list.html",
                                files=file_system[request.args['side']].selected_files)
 
-@app.route('/diskUsage', methods=['GET'])
-def disk_usage():
-        file_system[request.args['side']].get_statistics()
+def get_piechart_data(side):
 
-        return json.dumps([ { 'value': 300,
+    side_disk_usage = file_system[side].get_statistics()
+
+    return [ { 'value': float("{0:.2f}".format(side_disk_usage.used/1024.0/1024.0/1024.0)),
                         'color':"#F7464A",
                         'highlight': "#FF5A5E",
-                        'label': "Red"
+                        'label': "Used (GB)"
                     },
                     {
-                        'value': 50,
+                        'value': float("{0:.2f}".format(side_disk_usage.free/1024.0/1024.0/1024.0)),
                         'color': "#46BFBD",
                         'highlight': "#5AD3D1",
-                        'label': "Green"
-                    },
-                    {
-                        'value': 100,
-                        'color': "#FDB45C",
-                        'highlight': "#FFC870",
-                        'label': "Yellow"
+                        'label': "Free (GB)"
                     }
-                ])
+                    #,
+                    #{
+                    #    'value': 100,
+                    #    'color': "#FDB45C",
+                    #    'highlight': "#FFC870",
+                    #    'label': "Yellow"
+                    #}
+                ]
+
+@app.route('/diskUsage', methods=['GET'])
+def disk_usage():
+
+        return json.dumps(get_piechart_data(request.args['side']))
+
 
 @app.route('/create_dir',  methods=['GET', 'POST'])
 def create_directory():
     if request.method == 'POST':
+        #TODO use generic method!!
         try:
 
             create_dir(parent_directory=file_system[request.form['side']].current_folder,

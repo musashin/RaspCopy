@@ -1,3 +1,5 @@
+
+
 <div class="modal fade" id="file_system_info">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -6,9 +8,15 @@
         <h4 class="modal-title" id="file_system_info_tile">Infos</h4>
       </div>
       <div class="modal-body" >
-        <p id="InfoBody">
+        <h2>Disk Usage</h2>
 
-            <canvas id="DiskUsage" width="400" height="400"></canvas>
+        <p id="InfoChart" class="text-center">
+                <canvas id="DiskUsage" width="400" height="400"></canvas>
+        </p>
+
+        <h2>Selected Files</h2>
+
+        <p id="InfoSelected" class="text-center">
 
         </p>
       </div>
@@ -27,7 +35,9 @@
                     ,function(data,status){
 
                     var ctx = document.getElementById("DiskUsage").getContext("2d");
-                    var disk_usage_chart = new Chart(ctx).Pie(data);
+                    var disk_usage_chart = new Chart(ctx).Pie(data,{
+                                                                    animateScale: true
+                                                                    });
                   });
 
 

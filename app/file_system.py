@@ -58,8 +58,7 @@ class FileSystem:
             self.current_folder = join(self.current_folder, folder)
 
     def get_statistics(self):
-        print "in"
-        print psutil.disk_usage(self.home_folder)
+        return psutil.disk_usage(self.home_folder)
 
     def get_file_list(self):
 

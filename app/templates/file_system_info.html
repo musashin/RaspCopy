@@ -11,7 +11,7 @@
         <h2>Disk Usage</h2>
 
         <p id="InfoChart" class="text-center">
-                <canvas id="DiskUsage" width="400" height="400"></canvas>
+                <canvas id="DiskUsage" width="200" height="200"></canvas>
         </p>
 
         <h2>Selected Files</h2>
@@ -29,13 +29,20 @@
 
 <script>
 
+
+        var disk_usage_chart
         $('#file_system_info').on('shown.bs.modal', function () {
 
-                   $.getJSON("/diskUsage",{side: "source"}
+                   $.getJSON("/diskUsage",{side: "source"} //TODO use proper source
                     ,function(data,status){
 
                     var ctx = document.getElementById("DiskUsage").getContext("2d");
-                    var disk_usage_chart = new Chart(ctx).Pie(data,{
+
+                    if(disk_usage_chart){
+                        delete disk_usage_chart;
+                    }
+
+                    disk_usage_chart = new Chart(ctx).Pie(data,{
                                                                     animateScale: true
                                                                     });
                   });

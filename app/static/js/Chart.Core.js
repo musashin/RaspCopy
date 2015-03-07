@@ -29,7 +29,7 @@
 		var height = this.height = context.canvas.height;
 		this.aspectRatio = this.width / this.height;
 		//High pixel density displays - multiply the size of the canvas height/width by the device pixel ratio, then scale.
-		helpers.retinaScale(this);
+		//helpers.retinaScale(this);
 
 		return this;
 	};
@@ -837,7 +837,7 @@
 			canvas.width = this.chart.width = newWidth;
 			canvas.height = this.chart.height = newHeight;
 
-			retinaScale(this.chart);
+			//retinaScale(this.chart);
 
 			if (typeof callback === "function"){
 				callback.apply(this, Array.prototype.slice.call(arguments, 1));

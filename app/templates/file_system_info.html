@@ -16,7 +16,7 @@
 
         <h2>Selected Files</h2>
 
-        <p id="InfoSelected" class="text-center">
+        <p id="InfoSelected">
 
         </p>
       </div>
@@ -45,6 +45,12 @@
                     disk_usage_chart = new Chart(ctx).Pie(data,{
                                                                     animateScale: true
                                                                     });
+
+                    $.get("/selectedFiles",{side: "source"} //TODO use proper source
+                        ,function(data,status){
+
+                        $("#InfoSelected").html(data);
+                    });
                   });
 
 

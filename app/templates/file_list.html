@@ -1,7 +1,13 @@
 <p>
+    {% if files|count >0 %}
     <ul>
+
     {% for file in files %}
           <li>{{file.filename}}</li>
     {% endfor %}
     </ul>
+    {% else %}
+    Nothing selected
+    {% endif %}
+
 </p>

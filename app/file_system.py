@@ -24,6 +24,9 @@ class FileSystem:
     def get_selected_size(self):
         return filesize.size(sum([f['size'] for f in self.selected_files]))
 
+    def get_selected_size_raw(self):
+        return sum([f['size'] for f in self.selected_files])
+
     def add_selected_file(self, filename):
 
         self.selected_files.append({'filename': filename, 'folder': self.current_folder,

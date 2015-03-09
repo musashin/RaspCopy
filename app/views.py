@@ -94,25 +94,50 @@ def get_piechart_data(side):
 
     side_disk_usage = file_system[side].get_statistics()
 
-    return [ { 'value': float("{0:.2f}".format(side_disk_usage.used/1024.0/1024.0/1024.0)),
+    used = side_disk_usage.used/1024.0/1024.0/1024.0
+    free = side_disk_usage.free/1024.0/1024.0/1024.0
+
+    if side == 'source':
+        chart = [ { 'value': float("{0:.2f}".format(used)),
                         'color':"#F7464A",
                         'highlight': "#FF5A5E",
                         'label': "Used (GB)"
                     },
                     {
-                        'value': float("{0:.2f}".format(side_disk_usage.free/1024.0/1024.0/1024.0)),
+                        'value': float("{0:.2f}".format(free)),
                         'color': "#46BFBD",
                         'highlight': "#5AD3D1",
                         'label': "Free (GB)"
                     }
-                    #,
-                    #{
-                    #    'value': 100,
-                    #    'color': "#FDB45C",
-                    #    'highlight': "#FFC870",
-                    #    'label': "Yellow"
-                    #}
                 ]
+    else:
+
+        copied = file_system['source'].get_selected_size_raw()/1024.0/1024.0/1024.0
+
+        free -= copied
+        if free<0: free = 0
+
+        chart = [ { 'value': float("{0:.2f}".format(used)),
+                        'color':"#F7464A",
+                        'highlight': "#FF5A5E",
+                        'label': "Used (GB)"
+                    },
+                    {
+                        'value': float("{0:.2f}".format(free)),
+                        'color': "#46BFBD",
+                        'highlight': "#5AD3D1",
+                        'label': "Free (GB)"
+                    }
+                    ,
+                    {
+                        'value': float("{0:.2f}".format(copied)),
+                        'color': "#FDB45C",
+                        'highlight': "#FFC870",
+                        'label': "Copied (GB)"
+                    }
+                ]
+
+    return chart
 
 @app.route('/diskUsage', methods=['GET'])
 def disk_usage():

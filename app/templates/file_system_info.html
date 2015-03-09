@@ -33,7 +33,7 @@
         var disk_usage_chart
         $('#file_system_info').on('shown.bs.modal', function () {
 
-                   $.getJSON("/diskUsage",{side: "source"} //TODO use proper source
+                   $.getJSON("/diskUsage",{side: gCurrentSide}
                     ,function(data,status){
 
                     var ctx = document.getElementById("DiskUsage").getContext("2d");
@@ -43,18 +43,15 @@
                     }
 
                     disk_usage_chart = new Chart(ctx).Pie(data,{
-                                                                    animateScale: true
-                                                                    });
+                                                                animateScale: true
+                                                                });
 
-                    $.get("/selectedFiles",{side: "source"} //TODO use proper source
+                    $.get("/selectedFiles",{side: gCurrentSide}
                         ,function(data,status){
 
                         $("#InfoSelected").html(data);
                     });
                   });
-
-
-
             });
 
 </script>

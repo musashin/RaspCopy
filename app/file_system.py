@@ -34,6 +34,12 @@ class FileSystem:
 
         return self.get_selected_size()
 
+    def clear_selected_file(self):
+
+        self.selected_files = []
+
+        return self.get_selected_size()
+
     def remove_selected_file(self, filename):
 
         self.selected_files = [f for f in self.selected_files

@@ -37,6 +37,11 @@
 <p>
     <div class="btn-group btn-group-justified" role="group">
         <div class="text-center">
+             <button id=clear_{{side}} class="btn">
+                Clear
+                <i class="fa fa-cog fa-spin fa-1x" id=clear_spin_{{side}} style="display:none;" ></i>
+                <i class="fa fa-times fa-1x" id="clear_icon_{{side}}"></i>
+            </button>
             <button id=delete_{{side}} class="btn btn-danger">
                 Delete
                 <i class="fa fa-cog fa-spin fa-1x" id=delete_files_spin_{{side}} style="display:none;" ></i>
@@ -92,6 +97,15 @@
         $('#file_system_info').modal('show');
 
     });
+
+
+    $("#clear_{{side}}").click( function(){
+
+        clear_selected_files('{{side}}');
+
+        $(".{{selector_classes.file}}:checked").removeAttr('checked');
+    });
+
 
     $("#delete_{{side}}").click( function(){
 

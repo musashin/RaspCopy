@@ -108,6 +108,12 @@ td input[type="checkbox"] {
 
     }
 
+    function clear_selected_files(side){
+
+       $("#selected_size_id_"+side).load('/clear',{side: side});
+
+    }
+
     function mount_file_system(side){
 
       $.post("/mount",
@@ -233,7 +239,7 @@ td input[type="checkbox"] {
             }
             else {
 
-                setTimeout(function() { indicate_action_in_progress('delete_files',side,true)}, gStatusRefreshPeriodMs);
+                setTimeout(function() { indicate_action_in_progress('delete_files',side,true,function(){clear_selected_files(side);})}, gStatusRefreshPeriodMs);
             }
 
         });
@@ -258,7 +264,7 @@ td input[type="checkbox"] {
 
 
     var background_job_status_str = ''
-    function indicate_action_in_progress(background_job_name,side,start)
+    function indicate_action_in_progress(background_job_name,side,start,finish_function)
     {
 
           $.getJSON("/job_status",{job_name: background_job_name}, function(result){
@@ -289,6 +295,11 @@ td input[type="checkbox"] {
 
                  animate(false, background_job_name, side);
                  set_folder(side,'')
+
+                 if(finish_function)
+                 {
+                    finish_function();
+                 }
             }
         })
     }

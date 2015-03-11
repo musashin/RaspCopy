@@ -30,6 +30,11 @@ def deselect_file():
 
     return file_system[request.form['side']].remove_selected_file(request.form['file_name'])
 
+@app.route('/clear', methods=['POST'])
+def clear_selection():
+
+    return file_system[request.form['side']].clear_selected_file()
+
 @app.route('/copy_status')
 def get_copy_job_status():
 

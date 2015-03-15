@@ -11,6 +11,17 @@
                 </tr>
             </thead>
             <tbody>
+                {% if filesBefore %}
+                <tr>
+                    <td colspan = "3">
+                        <div class="text-center">
+                        <button type="button" class="btn btn-default" id=moveup_{{side}}>
+                        <i class="fa fa-arrow-up fa-2x"></i>
+                        </button>
+                        </div>
+                    </td>
+                 </tr>
+                {% endif %}
                 {% for file in files %}
                     <tr>
                         {% if file.isfile %}
@@ -30,6 +41,17 @@
                         </td>
                     </tr>
                 {% endfor %}
+                {% if filesAfter %}
+                     <tr>
+                    <td colspan = "3">
+                        <div class="text-center">
+                        <button type="button" class="btn btn-default" id=movedown_{{side}}>
+                        <i class="fa fa-arrow-down fa-2x"></i>
+                        </button>
+                        </div>
+                    </td>
+                 </tr>
+                {% endif %}
             </tbody>
     </table>
 
@@ -89,6 +111,16 @@
          set_folder('{{side}}',$(this).attr('value'))
         }
 
+    });
+
+     $("#moveup_{{side}}").click( function(){
+
+        moveup('{{side}}');
+    });
+
+     $("#movedown_{{side}}").click( function(){
+
+        movedown('{{side}}');
     });
 
     $("#info_{{side}}").click( function(){

@@ -212,8 +212,25 @@ def mount():
                                selector_classes={'folder': "folder_selector_"+request.form['side'],
                                                  'file': "file_selector_"+request.form['side']},
                                select_size_id="selected_size_id_"+request.form['side'],
-                               current_folder=file_system[request.form['side']].get_current_folder_relative())
+                               current_folder=file_system[request.form['side']].get_current_folder_relative(),
+                               filesBefore=file_system[request.form['side']].files_before(),
+                               filesAfter=file_system[request.form['side']].files_after())
 
+@app.route('/moveup', methods=['POST'])
+def moveup():
+
+    file_system[request.form['side']].moveup()
+
+    return 'OK'
+
+
+
+@app.route('/movedown', methods=['POST'])
+def movedown():
+
+    file_system[request.form['side']].movedown()
+
+    return 'OK'
 
 
 @app.route('/open_folder', methods=['POST'])
@@ -248,4 +265,6 @@ def open_folder():
                                                  'file': "file_selector_"+request.form['side']},
                                select_size_id="selected_size_id_"+request.form['side'],
                                current_folder=file_system[request.form['side']].get_current_folder_relative(),
-                               config=conf[request.form['side']])
+                               config=conf[request.form['side']],
+                               filesBefore=file_system[request.form['side']].files_before(),
+                               filesAfter=file_system[request.form['side']].files_after())

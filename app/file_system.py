@@ -10,6 +10,8 @@ import time
 
 copy_in_progress = False
 copy_percent = 0
+_MAX_ENTRIES_IN_LIST = 4
+_JUMP = 2
 
 
 class FileSystem:
@@ -20,6 +22,7 @@ class FileSystem:
         self.current_folder = self.home_folder
         self.selected_files = []
         self.config = config
+        self.current_index = 0
 
     def get_selected_size(self):
         return filesize.size(sum([f['size'] for f in self.selected_files]))
@@ -52,14 +55,19 @@ class FileSystem:
         return any(f['filename'] == filename and f['folder'] == folder for f in self.selected_files)
 
     def select_home(self):
-         self.current_folder = self.home_folder
+        self.current_index = 0
+        self.current_folder = self.home_folder
 
     def select_up(self):
 
+        self.current_index = 0
         if len(self.current_folder) > len(self.home_folder):
             self.current_folder = sep.join(self.current_folder.split(sep)[0:-1])
 
     def select_subfolder(self, folder):
+
+        if folder != self.current_folder:
+            self.current_index = 0
 
         if folder == "root":
             self.current_folder = self.home_folder
@@ -69,7 +77,7 @@ class FileSystem:
     def get_statistics(self):
         return psutil.disk_usage(self.home_folder)
 
-    def get_file_list(self):
+    def get_file_list(self, filtered=True):
 
         file_list = [{'filename': f,
                       'filesize_human': filesize.size(self.safe_file_size(self.current_folder, f)),
@@ -85,7 +93,24 @@ class FileSystem:
                                  'isfile':  False,
                                  'isselected':  False})
 
-        return file_list
+        if filtered:
+            return file_list[self.current_index:self.current_index+_MAX_ENTRIES_IN_LIST]
+        else:
+            return file_list
+
+    def moveup(self):
+        self.current_index -= _JUMP
+        self.current_index = max(self.current_index, 0)
+
+    def movedown(self):
+        self.current_index += _JUMP
+        self.current_index = min(self.current_index, max(0, len(self.get_file_list(False))-1))
+
+    def files_before(self):
+        return self.current_index > 0
+
+    def files_after(self):
+        return (self.current_index +_MAX_ENTRIES_IN_LIST)<=len(self.get_file_list(False))
 
     def get_folder_size(self, start_path='.'):
         total_size = 0

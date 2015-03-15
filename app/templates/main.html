@@ -87,9 +87,17 @@ td input[type="checkbox"] {
          $('#StatusPane').collapse({'toggle': false});
     });
 
-    function refresh(){
-        set_folder('source','')
-        set_folder('destination','')
+    function refresh(side){
+
+        if(side)
+        {
+            set_folder('source','');
+        }
+        else
+        {
+            set_folder('source','')
+            set_folder('destination','')
+        }
     }
 
     function set_folder(side,folder){
@@ -125,6 +133,26 @@ td input[type="checkbox"] {
 
     }
 
+    function moveup(side){
+
+      $.post("/moveup",
+      {
+        side: side
+      },function(data,status){
+            refresh(side);
+      });
+    }
+
+    function movedown(side){
+
+       $.post("/movedown",
+      {
+        side: side
+      },function(data,status){
+            refresh(side);
+      });
+
+    }
 
     function unmount_file_system(side){
 

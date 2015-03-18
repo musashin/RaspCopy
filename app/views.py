@@ -146,9 +146,11 @@ def get_piechart_data(side):
 
 @app.route('/diskUsage', methods=['GET'])
 def disk_usage():
-
         return json.dumps(get_piechart_data(request.args['side']))
 
+@app.route('/currentFolderSize', methods=['GET'])
+def currentFolderSize():
+    return str(file_system[request.args['side']].get_current_folder_size())
 
 @app.route('/create_dir',  methods=['GET', 'POST'])
 def create_directory():

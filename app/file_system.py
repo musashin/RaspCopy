@@ -58,6 +58,9 @@ class FileSystem:
         self.current_index = 0
         self.current_folder = self.home_folder
 
+    def get_current_folder_size(self):
+        return sum([file['filesize_bytes'] for file in self.get_file_list(filtered=False)])
+
     def select_up(self):
 
         self.current_index = 0

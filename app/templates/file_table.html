@@ -141,17 +141,32 @@
 
     $("#delete_{{side}}").click( function(){
 
-       $.get("/selectedFiles",{side: "{{side}}"}
+
+       $.get("/currentFolderSize",{side: "{{side}}"}
         ,function(data,status){
 
-        $("#confirmBody").html(data);
-      });
+         var currentFolderSize = parseInt(data,10);
 
-       $("#confirmDialogTitle").text('Are you sure you want to delete:');
-       $('#confirmDialogYes').unbind('click');
-       $('#confirmDialogYes')[0].setAttribute('onclick','deleteSelectedFiles("{{side}}")');
-       $("#confirmDialogYes").val("{{side}}");
-       $('#confirmDialog').modal('show');
+
+         if(currentFolderSize == 0)
+         {
+            console.log("offer to delete folder");
+         }
+         else
+         {
+              $.get("/selectedFiles",{side: "{{side}}"}
+                ,function(data,status){
+
+                $("#confirmBody").html(data);
+                });
+
+            $("#confirmDialogTitle").text('Are you sure you want to delete:');
+            $('#confirmDialogYes').unbind('click');
+            $('#confirmDialogYes')[0].setAttribute('onclick','deleteSelectedFiles("{{side}}")');
+            $("#confirmDialogYes").val("{{side}}");
+            $('#confirmDialog').modal('show');
+         }
+      });
 
     });
 

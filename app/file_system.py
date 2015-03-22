@@ -1,6 +1,6 @@
 from __future__ import division
 
-from os import listdir, walk, sep, stat, remove, mkdir
+from os import listdir, walk, sep, stat, remove, mkdir, rmdir
 from os.path import isfile, getsize, join, normpath, basename
 from utils.hurry import filesize
 from async_task import async, get_background_status
@@ -10,9 +10,9 @@ import time
 
 copy_in_progress = False
 copy_percent = 0
-_MAX_ENTRIES_IN_LIST = 4
+_MAX_ENTRIES_IN_LIST = 6
 _JUMP = 2
-
+_FILE_BLOCK_SIZE = 16384
 
 class FileSystem:
 
@@ -168,7 +168,7 @@ def unmount(command, post_delay=0, execution_thread=None):
     if execution_thread:
         execution_thread.remove_from_jobs()
 
-block_size = 128 #16384
+
 
 def copy_file(source_file, destination_file, overwrite, report_delegate=None):
 
@@ -187,9 +187,9 @@ def copy_file(source_file, destination_file, overwrite, report_delegate=None):
         cur_block_pos = 0  # a running total of current position
 
         while True:
-            cur_block = src.read(block_size)
+            cur_block = src.read(_FILE_BLOCK_SIZE)
 
-            cur_block_pos += block_size
+            cur_block_pos += _FILE_BLOCK_SIZE
 
             if report_delegate:
                 report_delegate(status='Copying \'' + basename(source_file) + '\'',
@@ -240,6 +240,20 @@ def copy_files(files_to_copy, destination_folder, overwrite, execution_thread=No
 
         copy_in_progress = False
 
+        if execution_thread:
+            execution_thread.remove_from_jobs()
+@async
+def delete_folder(folder_to_delete, home_folder, execution_thread=None):
+
+    if folder_to_delete == home_folder:
+        raise Exception('Cannot delete home folder')
+    try:
+        execution_thread.report_status(status='deleting ' + folder_to_delete,
+                                       percent='-')
+        rmdir(folder_to_delete)
+        time.sleep(0.1)
+
+    finally:
         if execution_thread:
             execution_thread.remove_from_jobs()
 

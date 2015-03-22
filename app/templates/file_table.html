@@ -150,7 +150,12 @@
 
          if(currentFolderSize == 0)
          {
-            console.log("offer to delete folder");
+            $("#confirmDialogTitle").text('Are you sure you want to delete the folder {{current_folder}} :');
+            $("#confirmBody").text('');
+            $('#confirmDialogYes').unbind('click');
+            $('#confirmDialogYes')[0].setAttribute('onclick','deleteCurrentFolder("{{side}}")');
+            $("#confirmDialogYes").val("{{side}}");
+            $('#confirmDialog').modal('show');
          }
          else
          {
@@ -180,6 +185,7 @@
        $('#confirmDialogYes').unbind('click');
        $('#confirmDialogYes')[0].setAttribute('onclick','createDirectory("{{side}}")');
        $("#confirmDialogYes").val("{{side}}");
+       $("#confirmBody").text('');
        $('#confirmDialog').modal('show');
 
     });

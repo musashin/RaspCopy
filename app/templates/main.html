@@ -254,6 +254,25 @@ td input[type="checkbox"] {
         });
     }
 
+    function deleteCurrentFolder(side)
+    {
+         $.post("/deleteFolder",{side: side},function(data ){
+
+            if(data.error){
+                $("#errorDialogMessage").html("<p>"+data.message+"</p>");
+                $("#errorDialogMessageDetails").text(data.error_details);
+
+                $('#errorDialog').modal('show');
+            }
+            else {
+
+                set_folder(side,'..')
+
+                setTimeout(function() { indicate_action_in_progress('delete_folder',side,true)}, gStatusRefreshPeriodMs);
+            }
+
+        });
+    }
 
     function deleteSelectedFiles(side){
 

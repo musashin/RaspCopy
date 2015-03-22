@@ -2,7 +2,7 @@
 from app import app
 from flask import render_template, request, jsonify, flash
 import config
-from file_system import FileSystem, mount_device, copy_files, get_copy_status, delete_files, create_dir, unmount
+from file_system import FileSystem, mount_device, copy_files, get_copy_status, delete_files, create_dir, unmount, delete_folder
 from async_task import get_failed_job, get_background_status
 import json
 import time
@@ -174,6 +174,17 @@ def deleteFiles():
      #TODO, prevent multiple operations!!
     try:
         delete_files(files_to_delete=file_system[request.form['side']].selected_files)
+    except Exception as e:
+        return jsonify(error=True, message='Delete Error', error_details=str(e))
+    else:
+        return jsonify(error=False)
+
+@app.route('/deleteFolder', methods=['POST'])
+def deleteFolder():
+     #TODO, prevent multiple operations!!
+    try:
+        delete_folder(folder_to_delete=file_system[request.form['side']].current_folder,
+                      home_folder=file_system[request.form['side']].home_folder)
     except Exception as e:
         return jsonify(error=True, message='Delete Error', error_details=str(e))
     else:

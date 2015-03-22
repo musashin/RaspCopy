@@ -83,11 +83,12 @@ class FileSystem:
     def get_file_list(self, filtered=True):
 
         file_list = [{'filename': f,
-                      'filesize_human': filesize.size(self.safe_file_size(self.current_folder, f)),
-                      'filesize_bytes': self.safe_file_size(self.current_folder, f),
-                      'isfile':  isfile(join(self.current_folder, f)),
-                      'isselected':  self.is_selected(f, self.current_folder)}
-                     for f in listdir(self.current_folder)]
+                    'filesize_human': filesize.size(self.safe_file_size(self.current_folder, f)),
+                    'filesize_bytes': self.safe_file_size(self.current_folder, f),
+                    'isfile':  isfile(join(self.current_folder, f)),
+                    'isselected':  self.is_selected(f, self.current_folder)}
+                    for f in listdir(unicode(self.current_folder))]
+
 
         if len(self.current_folder) > len(self.home_folder):
             file_list.insert(0, {'filename': '..',
@@ -95,7 +96,6 @@ class FileSystem:
                                  'filesize_bytes': 0,
                                  'isfile':  False,
                                  'isselected':  False})
-
         if filtered:
             return file_list[self.current_index:self.current_index+_MAX_ENTRIES_IN_LIST]
         else:
@@ -300,6 +300,10 @@ if __name__ == '__main__':
     import config
     import time
 
+    test = FileSystem(config.destination)
+
+    print test.get_file_list()
+
     #copy_file(source_file='C:\\temp\\source\\output.txt', destination_file='C:\\temp\\dest\\output.txt', overwrite=True)
 
     #copy_file(source_file='C:\\temp\\source\\wildlife.wmv', destination_file='C:\\temp\\dest\\output.txt', overwrite=True)
@@ -309,11 +313,11 @@ if __name__ == '__main__':
     #            destination_folder='C:\\temp\\dest\\',
     #            overwrite=True)
 
-    mount_device(command=config.destination['mount_command'], post_delay=10)
+    #mount_device(command=config.destination['mount_command'], post_delay=10)
 
     #umount_device(command=config.source['unmount_command'], post_delay=10)
 
-    while True:
-        time.sleep(0.5)
-        print get_background_status('copy_folder')
+    #while True:
+    #    time.sleep(0.5)
+    #    print get_background_status('copy_folder')
 

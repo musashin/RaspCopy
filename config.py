@@ -7,7 +7,6 @@ source['directory'] =  r'C:\temp\source'
 source['mount_command'] = 'notepad'
 source['unmount_command'] = ''
 
-
 destination = dict()
 destination['directory'] = r'C:\temp\dest'
 destination['mount_command'] = 'calc'

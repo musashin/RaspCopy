@@ -192,8 +192,12 @@ def copy_file(source_file, destination_file, overwrite, report_delegate=None):
             cur_block_pos += _FILE_BLOCK_SIZE
 
             if report_delegate:
-                report_delegate(status='Copying \'' + basename(source_file) + '\'',
-                                percent=round(float(cur_block_pos)/float(src_size)*100.0))
+                try:
+                    report_delegate(status='Copying \'' + basename(source_file) + '\'',
+                                    percent=round(float(cur_block_pos)/float(src_size)*100.0))
+                except Exception as e:
+                    report_delegate(status='Copying \'' + basename(source_file) + '\'',
+                                    percent=0.0)
 
             if not cur_block:
                 break
@@ -235,13 +239,13 @@ def copy_files(files_to_copy, destination_folder, overwrite, execution_thread=No
                       destination_file=join(destination_folder, file_to_copy['filename']),
                       overwrite=overwrite,
                       report_delegate=status_delegate)
-
     finally:
 
         copy_in_progress = False
 
         if execution_thread:
             execution_thread.remove_from_jobs()
+
 @async
 def delete_folder(folder_to_delete, home_folder, execution_thread=None):
 
@@ -262,7 +266,7 @@ def delete_files(files_to_delete, execution_thread=None):
 
     try:
         for fileToDelete in files_to_delete:
-            execution_thread.report_status(status='deleting ' + fileToDelete['filename'],
+            execution_thread.report_status(status='deleting ' + fileToDelete['filename'].encode('ascii', 'ignore'),
                                            percent='-')
             #print "deleting" + str(join(fileToDelete['folder'], fileToDelete['filename']))
             remove(join(fileToDelete['folder'], fileToDelete['filename']))
@@ -276,7 +280,7 @@ def delete_files(files_to_delete, execution_thread=None):
 def create_dir(parent_directory, name_of_new_directory, execution_thread=None):
 
     try:
-        execution_thread.report_status(status='creating ' + name_of_new_directory,
+        execution_thread.report_status(status='creating ' + name_of_new_directory.encode('ascii', 'ignore'),
                                        percent='-')
 
         mkdir(join(parent_directory, name_of_new_directory))
@@ -316,7 +320,7 @@ if __name__ == '__main__':
 
     test = FileSystem(config.destination)
 
-    print test.get_file_list()
+    #print test.get_file_list()
 
     #copy_file(source_file='C:\\temp\\source\\output.txt', destination_file='C:\\temp\\dest\\output.txt', overwrite=True)
 

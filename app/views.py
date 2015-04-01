@@ -58,7 +58,6 @@ def get_copy_job_status():
 
 @app.route('/job_status')
 def job_status():
-
     status = get_background_status(request.args['job_name'])
 
     if status:

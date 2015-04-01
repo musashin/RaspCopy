@@ -314,8 +314,11 @@ td input[type="checkbox"] {
     function indicate_action_in_progress(background_job_name,side,start,finish_function)
     {
 
+          console.log('in' + background_job_name);
+
           $.getJSON("/job_status",{job_name: background_job_name}, function(result){
 
+            console.log('getJSON');
             if(result.error){
 
                 $("#errorDialogMessage").html("<p>"+result.message+"</p>");
@@ -326,6 +329,7 @@ td input[type="checkbox"] {
             }
             else if(!result.complete){
 
+                console.log('!result.complete')
                 if(start){
                     animate(true, background_job_name, side);
                 }
@@ -336,6 +340,7 @@ td input[type="checkbox"] {
                 }
                 background_job_status_str = result.status
 
+                console.log('setTimeout')
                 setTimeout(function() { indicate_action_in_progress(background_job_name,side,false)}, gStatusRefreshPeriodMs);
             }
             else {

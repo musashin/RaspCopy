@@ -1,29 +1,29 @@
 
 <br><br><br><br><br><br><br><br>
 <div class="well">
-    <div class="text-center">
+  <div class="text-center">
 
-        <br><br>
+    <br><br>
 
-        <h2><i class="glyphicon glyphicon-thumbs-down"> Cannot display</i></h2>
-        <br>
+    <h2><i class="glyphicon glyphicon-thumbs-down"> Cannot display</i></h2>
+    <br>
 
-        <a data-toggle="collapse"  href="#details">
-          Details
-        </a>
+    <a data-toggle="collapse"  href="#details">
+      Details
+    </a>
 
-        <div id="details" class="panel-collapse collapse">
-            {{error_message}}
-        </div>
-        <br><br><br><br>
-
-        <div class="btn-group">
-            {% if config['mount_command'] %}
-                <button id="{{action.mount}}" class="btn btn-info btn-large"><i class="glyphicon glyphicon-hdd"></i> Mount</button>
-             {% endif %}
-            <button id="{{action.refresh}}" class="btn btn-info btn-large"><i class="glyphicon glyphicon-refresh"></i> Refresh</button>
-        </div>
+    <div id="details" class="panel-collapse collapse">
+      {{error_message}}
     </div>
+    <br><br><br><br>
+
+    <div class="btn-group">
+      {% if config['mount_command'] %}
+      <button id="{{action.mount}}" class="btn btn-info btn-large"><i class="glyphicon glyphicon-hdd"></i> Mount</button>
+      {% endif %}
+      <button id="{{action.refresh}}" class="btn btn-info btn-large"><i class="glyphicon glyphicon-refresh"></i> Refresh</button>
+    </div>
+  </div>
 </div>
 
 
@@ -33,7 +33,7 @@
     mount_file_system('{{side}}')
   });
 
-   $("#{{action.refresh}}").click(function () {
+  $("#{{action.refresh}}").click(function () {
     set_folder('{{side}}','home')
   });
 </script>

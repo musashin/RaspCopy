@@ -3,93 +3,93 @@
 
 
 <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th class="col-md-6">File</th>
-                    <th class="col-md-2">Size</th>
-                    <th class="col-md-1">Select</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% if filesBefore %}
-                <tr>
-                    <td colspan = "3">
-                        <div class="text-center">
-                        <button type="button" class="btn btn-default" id=moveup_{{side}}>
+    <thead>
+        <tr>
+            <th class="col-md-6">File</th>
+            <th class="col-md-2">Size</th>
+            <th class="col-md-1">Select</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if filesBefore %}
+        <tr>
+            <td colspan = "3">
+                <div class="text-center">
+                    <button type="button" class="btn btn-default" id=moveup_{{side}}>
                         <i class="fa fa-arrow-up fa-2x"></i>
-                        </button>
-                        </div>
-                    </td>
-                 </tr>
-                {% endif %}
-                {% for file in files %}
-                    <tr>
-                        {% if file.isfile %}
-                            <td><span class="glyphicon glyphicon-file"></span>   {{file.filename}}</td>
-                        {% else %}
-                            <td><span class="glyphicon glyphicon-folder-close"></span>   {{file.filename}}</td>
-                        {% endif %}
-                        <td>{{file.filesize_human}}</td>
-                        <td style="text-align:center;">
-                                <label class="checkbox">
-                                    {% if file.isfile %}
-                                        <input type="checkbox"  size={{file.filesize_bytes}} value="{{file.filename}}" class="{{selector_classes.file}}" {{'checked' if file.isselected }}>
-                                    {% else %}
-                                         <input type="checkbox"  size={{file.filesize_bytes}} value="{{file.filename}}" class="{{selector_classes.folder}}">
-                                    {% endif %}
-                                </label>
-                        </td>
-                    </tr>
-                {% endfor %}
-                {% if filesAfter %}
-                     <tr>
-                    <td colspan = "3">
-                        <div class="text-center">
-                        <button type="button" class="btn btn-default" id=movedown_{{side}}>
+                    </button>
+                </div>
+            </td>
+        </tr>
+        {% endif %}
+        {% for file in files %}
+        <tr>
+            {% if file.isfile %}
+            <td><span class="glyphicon glyphicon-file"></span>   {{file.filename}}</td>
+            {% else %}
+            <td><span class="glyphicon glyphicon-folder-close"></span>   {{file.filename}}</td>
+            {% endif %}
+            <td>{{file.filesize_human}}</td>
+            <td style="text-align:center;">
+                <label class="checkbox">
+                    {% if file.isfile %}
+                    <input type="checkbox"  size={{file.filesize_bytes}} value="{{file.filename}}" class="{{selector_classes.file}}" {{'checked' if file.isselected }}>
+                    {% else %}
+                    <input type="checkbox"  size={{file.filesize_bytes}} value="{{file.filename}}" class="{{selector_classes.folder}}">
+                    {% endif %}
+                </label>
+            </td>
+        </tr>
+        {% endfor %}
+        {% if filesAfter %}
+        <tr>
+            <td colspan = "3">
+                <div class="text-center">
+                    <button type="button" class="btn btn-default" id=movedown_{{side}}>
                         <i class="fa fa-arrow-down fa-2x"></i>
-                        </button>
-                        </div>
-                    </td>
-                 </tr>
-                {% endif %}
-            </tbody>
-    </table>
+                    </button>
+                </div>
+            </td>
+        </tr>
+        {% endif %}
+    </tbody>
+</table>
 
 <p class="muted" id="filesize">Total Size Selected: <span id="{{select_size_id}}">0</span></p>
 <p>
     <div class="btn-group btn-group-justified" role="group">
         <div class="text-center">
-             <button id=clear_{{side}} class="btn">
-                Clear
-                <i class="fa fa-cog fa-spin fa-1x" id=clear_spin_{{side}} style="display:none;" ></i>
-                <i class="fa fa-times fa-1x" id="clear_icon_{{side}}"></i>
-            </button>
-            <button id=delete_{{side}} class="btn btn-danger">
-                Delete
-                <i class="fa fa-cog fa-spin fa-1x" id=delete_files_spin_{{side}} style="display:none;" ></i>
-                <i class="fa fa-trash fa-1x" id="delete_files_icon_{{side}}"></i>
-            </button>
-             <button id=create_dir_{{side}} class="btn btn-success">
-                Create
-                <i class="fa fa-cog fa-spin fa-1x" id=create_dir_spin_{{side}} style="display:none;" ></i>
-                <i class="fa fa-folder  fa-1x" id="create_dir_icon_{{side}}"></i>
-            </button>
-            {% if config['unmount_command'] %}
-             <button id=unmount_{{side}} class="btn btn-warning">
-                Eject
-                <i class="fa fa-cog fa-spin fa-1x" id=unmount_spin_{{side}} style="display:none;" ></i>
-                <i class="fa fa-eject  fa-1x" id="unmount_icon_{{side}}"></i>
-            </button>
-            {% endif %}
+           <button id=clear_{{side}} class="btn">
+            Clear
+            <i class="fa fa-cog fa-spin fa-1x" id=clear_spin_{{side}} style="display:none;" ></i>
+            <i class="fa fa-times fa-1x" id="clear_icon_{{side}}"></i>
+        </button>
+        <button id=delete_{{side}} class="btn btn-danger">
+            Delete
+            <i class="fa fa-cog fa-spin fa-1x" id=delete_files_spin_{{side}} style="display:none;" ></i>
+            <i class="fa fa-trash fa-1x" id="delete_files_icon_{{side}}"></i>
+        </button>
+        <button id=create_dir_{{side}} class="btn btn-success">
+            Create
+            <i class="fa fa-cog fa-spin fa-1x" id=create_dir_spin_{{side}} style="display:none;" ></i>
+            <i class="fa fa-folder  fa-1x" id="create_dir_icon_{{side}}"></i>
+        </button>
+        {% if config['unmount_command'] %}
+        <button id=unmount_{{side}} class="btn btn-warning">
+            Eject
+            <i class="fa fa-cog fa-spin fa-1x" id=unmount_spin_{{side}} style="display:none;" ></i>
+            <i class="fa fa-eject  fa-1x" id="unmount_icon_{{side}}"></i>
+        </button>
+        {% endif %}
 
-             <button id=info_{{side}} class="btn btn-info">
-                Info
-                <i class="fa fa-info-circle  fa-1x"></i>
-             </button>
+        <button id=info_{{side}} class="btn btn-info">
+            Info
+            <i class="fa fa-info-circle  fa-1x"></i>
+        </button>
 
-        </div>
-            </div>
- </p>
+    </div>
+</div>
+</p>
 <script>
 
     //Bindings
@@ -99,26 +99,26 @@
 
           select_file('{{side}}',$(this).attr('value'))
 
-        } else {
+      } else {
 
           deselect_file('{{side}}',$(this).attr('value'))
-        }
-    });
+      }
+  });
 
-     $(".{{selector_classes.folder}}").click( function(){
+    $(".{{selector_classes.folder}}").click( function(){
 
         if( $(this).is(':checked') ){
-         set_folder('{{side}}',$(this).attr('value'))
-        }
+           set_folder('{{side}}',$(this).attr('value'))
+       }
 
-    });
+   });
 
-     $("#moveup_{{side}}").click( function(){
+    $("#moveup_{{side}}").click( function(){
 
         moveup('{{side}}');
     });
 
-     $("#movedown_{{side}}").click( function(){
+    $("#movedown_{{side}}").click( function(){
 
         movedown('{{side}}');
     });
@@ -142,65 +142,65 @@
     $("#delete_{{side}}").click( function(){
 
 
-       $.get("/currentFolderSize",{side: "{{side}}"}
+     $.get("/currentFolderSize",{side: "{{side}}"}
         ,function(data,status){
 
-         var currentFolderSize = parseInt(data,10);
+           var currentFolderSize = parseInt(data,10);
 
 
-         if(currentFolderSize == 0)
-         {
+           if(currentFolderSize == 0)
+           {
             $("#confirmDialogTitle").text('Are you sure you want to delete the folder {{current_folder}} :');
             $("#confirmBody").text('');
             $('#confirmDialogYes').unbind('click');
             $('#confirmDialogYes')[0].setAttribute('onclick','deleteCurrentFolder("{{side}}")');
             $("#confirmDialogYes").val("{{side}}");
             $('#confirmDialog').modal('show');
-         }
-         else
-         {
-              $.get("/selectedFiles",{side: "{{side}}"}
-                ,function(data,status){
+        }
+        else
+        {
+          $.get("/selectedFiles",{side: "{{side}}"}
+            ,function(data,status){
 
                 $("#confirmBody").html(data);
-                });
+            });
 
-            $("#confirmDialogTitle").text('Are you sure you want to delete:');
-            $('#confirmDialogYes').unbind('click');
-            $('#confirmDialogYes')[0].setAttribute('onclick','deleteSelectedFiles("{{side}}")');
-            $("#confirmDialogYes").val("{{side}}");
-            $('#confirmDialog').modal('show');
-         }
-      });
+          $("#confirmDialogTitle").text('Are you sure you want to delete:');
+          $('#confirmDialogYes').unbind('click');
+          $('#confirmDialogYes')[0].setAttribute('onclick','deleteSelectedFiles("{{side}}")');
+          $("#confirmDialogYes").val("{{side}}");
+          $('#confirmDialog').modal('show');
+      }
+  });
 
-    });
+});
 
-    $("#create_dir_{{side}}").click( function(){
+$("#create_dir_{{side}}").click( function(){
 
-       $.get("/create_dir",function(data,status){
-           $("#confirmBody").html(data);
-        });
+ $.get("/create_dir",function(data,status){
+     $("#confirmBody").html(data);
+ });
 
-       $("#confirmDialogTitle").text('Pick a name for the new directory');
-       $('#confirmDialogYes').unbind('click');
-       $('#confirmDialogYes')[0].setAttribute('onclick','createDirectory("{{side}}")');
-       $("#confirmDialogYes").val("{{side}}");
-       $("#confirmBody").text('');
-       $('#confirmDialog').modal('show');
+ $("#confirmDialogTitle").text('Pick a name for the new directory');
+ $('#confirmDialogYes').unbind('click');
+ $('#confirmDialogYes')[0].setAttribute('onclick','createDirectory("{{side}}")');
+ $("#confirmDialogYes").val("{{side}}");
+ $("#confirmBody").text('');
+ $('#confirmDialog').modal('show');
 
-    });
+});
 
-    $("#unmount_{{side}}").click( function(){
+$("#unmount_{{side}}").click( function(){
 
 
-       $("#confirmBody").text('');
-       $("#confirmDialogTitle").text('Are you sure you want to eject the media?');
-       $('#confirmDialogYes').unbind('click');
-       $('#confirmDialogYes')[0].setAttribute('onclick','unmount_file_system("{{side}}")');
-       $("#confirmDialogYes").val("{{side}}");
-       $('#confirmDialog').modal('show');
+ $("#confirmBody").text('');
+ $("#confirmDialogTitle").text('Are you sure you want to eject the media?');
+ $('#confirmDialogYes').unbind('click');
+ $('#confirmDialogYes')[0].setAttribute('onclick','unmount_file_system("{{side}}")');
+ $("#confirmDialogYes").val("{{side}}");
+ $('#confirmDialog').modal('show');
 
-    });
+});
 
 
 </script>

@@ -2,7 +2,7 @@
 from app import app
 from flask import render_template, request, jsonify, flash
 import config
-from file_system import FileSystem, mount_device, copy_files, get_copy_status, delete_files, create_dir, unmount, delete_folder
+from file_system import FileSystem, mount, copy_files, get_copy_status, delete_files, create_dir, unmount, delete_folder
 from async_task import get_failed_job, get_background_status
 import json
 import time
@@ -200,33 +200,14 @@ def unmount_method():
         return jsonify(error=False)
 
 @app.route('/mount', methods=['POST'])
-def mount():
+def mount_method():
 
     try:
-
-        mount_device(command=conf[request.form['side']]['mount_command'], post_delay=1)
-
-        file_list = file_system[request.form['side']].get_file_list()
-
+        mount(command=conf[request.form['side']]['mount_command'], post_delay=1)
     except Exception as e:
-
-        return render_template("file_error.html",
-                               error_message=str(e),
-                               side=request.form['side'],
-                               action={'mount': "mount_"+request.form['side'],
-                                       'refresh': "refresh_"+request.form['side']},
-                               config=conf[request.form['side']])
-
+        return jsonify(error=True, message='cannot mount', error_details=str(e))
     else:
-
-        return render_template("file_table.html", files=file_list,
-                               side=request.form['side'],
-                               selector_classes={'folder': "folder_selector_"+request.form['side'],
-                                                 'file': "file_selector_"+request.form['side']},
-                               select_size_id="selected_size_id_"+request.form['side'],
-                               current_folder=file_system[request.form['side']].get_current_folder_relative(),
-                               filesBefore=file_system[request.form['side']].files_before(),
-                               filesAfter=file_system[request.form['side']].files_after())
+        return jsonify(error=False)
 
 @app.route('/moveup', methods=['POST'])
 def moveup():
@@ -265,8 +246,7 @@ def open_folder():
         return render_template("file_error.html",
                                error_message=str(e),
                                side=request.form['side'],
-                               action={'mount': "mount_"+request.form['side'],
-                                       'refresh': "refresh_"+request.form['side']},
+                               action={'refresh': "refresh_"+request.form['side']},
                                config=conf[request.form['side']])
 
     else:

@@ -19,7 +19,12 @@
 
     <div class="btn-group">
       {% if config['mount_command'] %}
-      <button id="{{action.mount}}" class="btn btn-info btn-large"><i class="glyphicon glyphicon-hdd"></i> Mount</button>
+          <button id=mount_{{side}} class="btn btn-info">
+            Mount
+            <i class="fa fa-cog fa-spin fa-1x" id=mount_spin_{{side}} style="display:none;" ></i>
+            <i class="fa fa-hdd-o fa-1x" id="mount_icon_{{side}}"></i>
+        </button>
+
       {% endif %}
       <button id="{{action.refresh}}" class="btn btn-info btn-large"><i class="glyphicon glyphicon-refresh"></i> Refresh</button>
     </div>
@@ -28,8 +33,7 @@
 
 
 <script>
-  $("#{{action.mount}}").click(function () {
-    alert("mounting");
+  $("#mount_{{side}}").click(function () {
     mount_file_system('{{side}}')
   });
 

@@ -13,6 +13,7 @@ copy_percent = 0
 _MAX_ENTRIES_IN_LIST = 6
 _JUMP = 2
 _FILE_BLOCK_SIZE = 16384
+_FORCE_DELAYS = True
 
 class FileSystem:
 
@@ -141,7 +142,7 @@ class FileSystem:
         return size
 
 @async
-def mount_device(command, post_delay=0, execution_thread=None):
+def mount(command, post_delay=0, execution_thread=None):
 
     if execution_thread:
         execution_thread.report_status(status='mounting',
@@ -149,6 +150,10 @@ def mount_device(command, post_delay=0, execution_thread=None):
 
     subprocess.call(command)
     time.sleep(post_delay)
+
+    if _FORCE_DELAYS:
+        time.sleep(5)
+
     execution_thread.report_status(status='mounted',
                                    percent='100')
     if execution_thread:
@@ -163,6 +168,8 @@ def unmount(command, post_delay=0, execution_thread=None):
 
     subprocess.call(command)
     time.sleep(post_delay)
+    if _FORCE_DELAYS:
+        time.sleep(5)
     execution_thread.report_status(status='unmounted',
                                    percent='100')
     if execution_thread:
@@ -257,6 +264,9 @@ def delete_folder(folder_to_delete, home_folder, execution_thread=None):
         rmdir(folder_to_delete)
         time.sleep(0.1)
 
+        if _FORCE_DELAYS:
+            time.sleep(5)
+
     finally:
         if execution_thread:
             execution_thread.remove_from_jobs()
@@ -268,10 +278,11 @@ def delete_files(files_to_delete, execution_thread=None):
         for fileToDelete in files_to_delete:
             execution_thread.report_status(status='deleting ' + fileToDelete['filename'].encode('ascii', 'ignore'),
                                            percent='-')
-            #print "deleting" + str(join(fileToDelete['folder'], fileToDelete['filename']))
+
             remove(join(fileToDelete['folder'], fileToDelete['filename']))
             time.sleep(0.5)
-
+            if _FORCE_DELAYS:
+                time.sleep(5)
     finally:
         if execution_thread:
             execution_thread.remove_from_jobs()
@@ -285,7 +296,8 @@ def create_dir(parent_directory, name_of_new_directory, execution_thread=None):
 
         mkdir(join(parent_directory, name_of_new_directory))
         time.sleep(0.5)
-
+        if _FORCE_DELAYS:
+            time.sleep(5)
     finally:
         if execution_thread:
             execution_thread.remove_from_jobs()

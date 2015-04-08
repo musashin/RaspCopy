@@ -88,7 +88,7 @@
 
         if(side)
         {
-            set_folder('source','');
+            set_folder(side,'');
         }
         else
         {
@@ -199,6 +199,7 @@ $("#copy").click( function(){
 
 });
 
+var copy_job_status_str = ''
 function update_copy_status()
 {
 
@@ -214,9 +215,6 @@ function update_copy_status()
             $("#errorDialogMessageDetails").text(result.error_details);
 
             $('#errorDialog').modal('show');
-
-
-
         }
         else if(!result.complete){
 
@@ -229,6 +227,13 @@ function update_copy_status()
             $('#overallCopyProgress').css('width', result.overall_percent+'%').attr('aria-valuenow', result.overall_percent);
 
             $('#overallCopyProgress').text('Overall Status: ' + result.overall_percent.toString()+'%');
+
+            if(copy_job_status_str != result.copy_status)
+            {
+                refresh('destination');
+                copy_job_status_str = result.copy_status;
+            }
+
 
             setTimeout('update_copy_status()', gStatusRefreshPeriodMs);
         }
@@ -333,16 +338,16 @@ function indicate_action_in_progress(background_job_name,side,start,finish_funct
     }
     else if(!result.complete){
 
-
-        ///if(start){
-            animate(true, background_job_name, side);
-       // }
-
         if(result.status != background_job_status_str)
         {
             set_folder(side,'');
+            animate(true, background_job_name, side);
         }
         background_job_status_str = result.status
+
+        if(start){
+            animate(true, background_job_name, side);
+        }
 
         setTimeout(function() { indicate_action_in_progress(background_job_name,side,false,finish_function)}, gStatusRefreshPeriodMs);
     }

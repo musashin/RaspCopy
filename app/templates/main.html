@@ -63,9 +63,6 @@
     <button id=copy class="btn btn-success btn-large">Copy<i class="glyphicon glyphicon-chevron-right"></i></button>
 </div>
 
-<p >Test area <span id="test_string">0</span></p>
-
-
 </div>
 </div>
 </body>
@@ -337,9 +334,9 @@ function indicate_action_in_progress(background_job_name,side,start,finish_funct
     else if(!result.complete){
 
 
-        if(start){
+        ///if(start){
             animate(true, background_job_name, side);
-        }
+       // }
 
         if(result.status != background_job_status_str)
         {

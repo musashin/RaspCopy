@@ -152,7 +152,7 @@ def mount(command, post_delay=0, execution_thread=None):
     time.sleep(post_delay)
 
     if _FORCE_DELAYS:
-        time.sleep(5)
+        time.sleep(30)
 
     execution_thread.report_status(status='mounted',
                                    percent='100')

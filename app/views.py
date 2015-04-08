@@ -12,6 +12,14 @@ file_system['source'] = FileSystem(config.source)
 file_system['destination'] = FileSystem(config.destination)
 conf = {'source': config.source, 'destination': config.destination }
 
+def execute_with_error_handling(method_to_execute, error_string):
+    try:
+        method_to_execute()
+    except Exception as e:
+        return jsonify(error=True, message=error_string, error_details=str(e))
+    else:
+        return jsonify(error=False)
+
 
 @app.route('/')
 @app.route('/index')
@@ -152,62 +160,76 @@ def currentFolderSize():
     return str(file_system[request.args['side']].get_current_folder_size())
 
 @app.route('/create_dir',  methods=['GET', 'POST'])
-def create_directory():
-    if request.method == 'POST':
-        #TODO use generic method!!
-        try:
+def create_directory_request():
+    """
+    brief:  Create a directory
 
-            create_dir(parent_directory=file_system[request.form['side']].current_folder,
-                       name_of_new_directory=request.form['name'])
-        except Exception as e:
-            return jsonify(error=True, message='Could not create directory', error_details=str(e))
-        else:
-            return jsonify(error=False)
+    handled methods:
+        - POST: launch a directory creation background job. Both name and sides are parameters
+        of the request.
+        - GET: populate a directory name picker dialog box.
+    """
+    if request.method == 'POST':
+        side = request.form['side']
+        return execute_with_error_handling(lambda:  create_dir(parent_directory=file_system[side].current_folder,
+                                                               name_of_new_directory=request.form['name']),
+                                           'Could not create directory')
     else:
         return render_template("choose_dir_name.html")
 
-
-
 @app.route('/deleteFiles', methods=['POST'])
-def deleteFiles():
-     #TODO, prevent multiple operations!!
-    try:
-        delete_files(files_to_delete=file_system[request.form['side']].selected_files)
-    except Exception as e:
-        return jsonify(error=True, message='Delete Error', error_details=str(e))
-    else:
-        return jsonify(error=False)
+def delete_files_request():
+    """
+    brief:  Delete the files currently selected
+
+    handled methods:
+        - POST: launch a delete files background job. Sides is a parameter
+        of the request.
+    """
+    side = request.form['side']
+    return execute_with_error_handling(lambda:  delete_files(files_to_delete=file_system[side].selected_files),
+                                       'Delete Error')
+
 
 @app.route('/deleteFolder', methods=['POST'])
-def deleteFolder():
-     #TODO, prevent multiple operations!!
-    try:
-        delete_folder(folder_to_delete=file_system[request.form['side']].current_folder,
-                      home_folder=file_system[request.form['side']].home_folder)
-    except Exception as e:
-        return jsonify(error=True, message='Delete Error', error_details=str(e))
-    else:
-        return jsonify(error=False)
+def delete_folder_request():
+    """
+    brief:  Delete the current folder
+
+    handled methods:
+        - POST: launch a delete folder background job on the selected side current folder. Side is a parameter
+        of the request.
+    """
+    side = request.form['side']
+    return execute_with_error_handling(lambda:  delete_folder(folder_to_delete=file_system[side].current_folder,
+                                                              home_folder=file_system[side].home_folder),
+                                       'Delete Error')
 
 @app.route('/unmount', methods=['POST'])
-def unmount_method():
-     #TODO, prevent multiple operations!!
-    try:
-        unmount(command=conf[request.form['side']]['unmount_command'], post_delay=1)
-    except Exception as e:
-        return jsonify(error=True, message='cannot eject', error_details=str(e))
-    else:
-        return jsonify(error=False)
+def unmount_request():
+    """
+    brief:  Launch the unmount background job
+
+    handled methods:
+        - POST: launch an unmount background job (the actual system command is selected
+        in the configuration file). Side is a parameter of the request.
+    """
+    side = request.form['side']
+    return execute_with_error_handling(lambda:  unmount(command=conf[side]['unmount_command'], post_delay=1),
+                                       'Delete Error')
 
 @app.route('/mount', methods=['POST'])
-def mount_method():
+def mount_request():
+    """
+    brief:  Launch the mount background job
 
-    try:
-        mount(command=conf[request.form['side']]['mount_command'], post_delay=1)
-    except Exception as e:
-        return jsonify(error=True, message='cannot mount', error_details=str(e))
-    else:
-        return jsonify(error=False)
+    handled methods:
+        - POST: launch an mount background job (the actual system command is selected
+        in the configuration file). Side is a parameter of the request.
+    """
+    side = request.form['side']
+    return execute_with_error_handling(lambda: mount(command=conf[side]['mount_command'], post_delay=1),
+                                       'Delete Error')
 
 @app.route('/moveup', methods=['POST'])
 def moveup():

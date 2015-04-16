@@ -56,9 +56,9 @@
 
 }
 
-function moveup(side){
+function prevfiles(side){
 
-  $.post("/moveup",
+  $.post("/prevfiles",
   {
     side: side
 },function(data,status){
@@ -66,9 +66,9 @@ function moveup(side){
 });
 }
 
-function movedown(side){
+function nextfiles(side){
 
- $.post("/movedown",
+ $.post("/nextfiles",
  {
     side: side
 },function(data,status){

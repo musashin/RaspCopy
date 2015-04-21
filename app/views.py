@@ -1,4 +1,7 @@
-
+"""
+    Defines the view presented by the single HTML page
+    that constitutes the application
+"""
 from app import app
 from flask import render_template, request, jsonify
 import config
@@ -9,7 +12,7 @@ import json
 file_system = dict()
 file_system['source'] = FileSystem(config.source)
 file_system['destination'] = FileSystem(config.destination)
-conf = {'source': config.source, 'destination': config.destination }
+conf = {'source': config.source, 'destination': config.destination}
 
 
 @app.route('/')
@@ -355,7 +358,7 @@ def open_folder_request():
         if request.form['folder'] == 'home':
             file_system[request.form['side']].select_home()
         elif request.form['folder'] == '..':
-            file_system[request.form['side']].select_up()
+            file_system[request.form['side']].select_parent_folder()
         elif not request.form['folder']:
             file_system[request.form['side']].select_subfolder(file_system[request.form['side']].current_folder)
         else:

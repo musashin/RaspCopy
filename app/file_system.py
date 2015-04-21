@@ -1,5 +1,15 @@
-from __future__ import division
+"""
+    This provides all the necessary function to display, navigate,
+    and get statistics, on a file system.
+    Additionnally, this provides methods to:
+     - maintain a lis tof selected files
+     - create folder
+     - mount/unmount
+     - copy files
+     - delete files or folders
+"""
 
+from __future__ import division
 from os import listdir, walk, sep, stat, remove, mkdir, rmdir
 from os.path import isfile, getsize, join, normpath, basename
 from utils.hurry import filesize
@@ -8,68 +18,108 @@ import subprocess
 import psutil
 import time
 
-copy_in_progress = False
+copy_in_progress = False    # true when a file copy operation is in progress
 copy_percent = 0
-_MAX_ENTRIES_IN_LIST = 6
-_JUMP = 2
-_FILE_BLOCK_SIZE = 16384
-_FORCE_DELAYS = True
+_MAX_ENTRIES_IN_LIST = 6    # max entry in file system file list view
+_JUMP = 2                   #
+_FILE_BLOCK_SIZE = 16384    # file block size (used during file copy)
+_FORCE_DELAYS = True        # force delays during background task (for debugging)
+
 
 class FileSystem:
+    """
+        This class is the data behind a file system 'view'
+        It contains the methods required to navigate, list files
+        and get statistic about a file system.
+        Also manitain  a list of selected files.
+    """
 
-    def __init__(self, config):
+    def __init__(self, file_system_config):
+        """
+            Constructor:
+                - current folder is the config home folder.
+                - No selected files.
+        """
 
-        self.home_folder = normpath(config['directory'])
+        self.home_folder = normpath(file_system_config['directory'])
+
         self.current_folder = self.home_folder
         self.selected_files = []
-        self.config = config
+        self.config = file_system_config
         self.current_index = 0
 
     def get_selected_size(self):
+        """
+            Get a string (with units!) representing the total size of
+            all selected files.
+        """
         return filesize.size(sum([f['size'] for f in self.selected_files]))
 
     def get_selected_size_raw(self):
+        """
+            Get the total size (in bytes) of all selected files
+        """
         return sum([f['size'] for f in self.selected_files])
 
     def add_selected_file(self, filename):
-
+        """
+            Add a new selected file in the current folder
+        """
         self.selected_files.append({'filename': filename, 'folder': self.current_folder,
                                     'size':  self.safe_file_size(self.current_folder, filename)})
 
         return self.get_selected_size()
 
     def clear_selected_file(self):
+        """
+            clear all selected files
+        """
 
         self.selected_files = []
 
         return self.get_selected_size()
 
     def remove_selected_file(self, filename):
-
+        """
+            Remove a selected file in the current folder
+        """
         self.selected_files = [f for f in self.selected_files
                                if not(f['filename'] == filename and f['folder'] == self.current_folder)]
 
         return self.get_selected_size()
 
     def is_selected(self, filename, folder):
-
+        """
+            Give a file and ant its containing folder, return True if this
+            file is selected.
+        """
         return any(f['filename'] == filename and f['folder'] == folder for f in self.selected_files)
 
     def select_home(self):
+        """
+            Set the current folder as the home folder
+        """
         self.current_index = 0
         self.current_folder = self.home_folder
 
     def get_current_folder_size(self):
+        """
+            Get the total size (in bytes) of the current folder
+        """
         return sum([file['filesize_bytes'] for file in self.get_file_list(filtered=False)])
 
-    def select_up(self):
-
+    def select_parent_folder(self):
+        """
+            Set the current folder as the parent of the current folder.
+        """
         self.current_index = 0
         if len(self.current_folder) > len(self.home_folder):
             self.current_folder = sep.join(self.current_folder.split(sep)[0:-1])
 
     def select_subfolder(self, folder):
-
+        """
+            Set the current folder as a subfolder of the current folder.
+        """
         if folder != self.current_folder:
             self.current_index = 0
 
@@ -79,17 +129,23 @@ class FileSystem:
             self.current_folder = join(self.current_folder, folder)
 
     def get_statistics(self):
+        """
+            Get statistics (used, free space...) for the file system
+        """
         return psutil.disk_usage(self.home_folder)
 
     def get_file_list(self, filtered=True):
-
+        """
+            Return a list describing the content of the current folder.
+             If filtered is true, ony a portion of the list (define by _MAX_ENTRIES_IN_LIST
+             and self.current_index is returned).
+        """
         file_list = [{'filename': f,
-                    'filesize_human': filesize.size(self.safe_file_size(self.current_folder, f)),
-                    'filesize_bytes': self.safe_file_size(self.current_folder, f),
-                    'isfile':  isfile(join(self.current_folder, f)),
-                    'isselected':  self.is_selected(f, self.current_folder)}
-                    for f in listdir(unicode(self.current_folder))]
-
+                      'filesize_human': filesize.size(self.safe_file_size(self.current_folder, f)),
+                      'filesize_bytes': self.safe_file_size(self.current_folder, f),
+                      'isfile':  isfile(join(self.current_folder, f)),
+                      'isselected':  self.is_selected(f, self.current_folder)}
+                       for f in listdir(unicode(self.current_folder))]
 
         if len(self.current_folder) > len(self.home_folder):
             file_list.insert(0, {'filename': '..',
@@ -98,11 +154,14 @@ class FileSystem:
                                  'isfile':  False,
                                  'isselected':  False})
         if filtered:
-            return file_list[self.current_index:self.current_index+_MAX_ENTRIES_IN_LIST]
+            return file_list[self.current_index : self.current_index+_MAX_ENTRIES_IN_LIST]
         else:
             return file_list
 
     def moveup(self):
+        """
+            If 
+        """
         self.current_index -= _JUMP
         self.current_index = max(self.current_index, 0)
 
@@ -135,7 +194,6 @@ class FileSystem:
                 size = getsize(element)
             else:
                 size = self.get_folder_size(element)
-
         except:
             size = 0
 
@@ -326,11 +384,11 @@ def get_copy_status():
 
 
 if __name__ == '__main__':
+    pass
+    #import config
+    #import time
 
-    import config
-    import time
-
-    test = FileSystem(config.destination)
+    #test = FileSystem(config.destination)
 
     #print test.get_file_list()
 
@@ -350,4 +408,3 @@ if __name__ == '__main__':
     #while True:
     #    time.sleep(0.5)
     #    print get_background_status('copy_folder')
-
